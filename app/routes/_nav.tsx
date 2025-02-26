@@ -8,13 +8,14 @@ export default function Nav() {
         "/dashboard/shop": "ภาพรวมของร้านค้า",
         "/dashboard/user": "ภาพรวมของผู้ใช้",
         "/createshop": "เพิ่มบัญชีร้านค้า",
-        "/allshop": "ร้านค้าทั้งหมด",
-        "/alluser": "ผู้ใช้ทั้งหมด",
+        "/shops": "ร้านค้าทั้งหมด",
+        "/users": "ผู้ใช้ทั้งหมด",
     };
 
     return (
         <div className="grid grid-cols-[1fr_5fr] min-h-screen">
             <SidebarMenu />
+            <div className="w-[257px]"></div>
             <main className="bg-gray-100">
                 <div className="w-full flex flex-row justify-between items-center p-4 border-b-[1px] border-b-[rgb(0,0,0,0.1)] bg-white text-black">
                     <h1 className="text-lg font-semibold">

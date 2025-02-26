@@ -16,22 +16,22 @@ const data = [
 export default function DashBoardShop () {
     return (
         <div className="flex flex-col justify-center">
-            <div className="w-full flex flex-row justify-between p-10 gap-4">
+            <div className="w-full flex flex-row justify-between px-10 pt-10 gap-4">
                 <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
                     <div className="p-4 rounded-full bg-[#C8C3F4]">
                         <Store width={24} height={24}/>
                     </div>
                     <div className="flex flex-col gap-1 justify-center items-center">
                         <h1 className="text-lg text-[rgb(0,0,0,0.5)]">ร้านค้าทั้งหมด</h1>
-                        <h1 className="text-4xl font-medium">1750</h1>
+                        <h1 className="text-4xl font-medium">1810</h1>
                     </div>
                 </div>
                 <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
-                    <div className="p-4 rounded-full bg-[#FFE3BE]">
-                        <Store width={24} height={24} color="#8D4F00"/>
+                    <div className="p-4 rounded-full bg-[#FC5A5A]">
+                        <Store width={24} height={24} color="#a93d3d"/>
                     </div>
                     <div className="flex flex-col gap-1 justify-center items-center">
-                        <h1 className="text-lg text-[rgb(0,0,0,0.5)]">ร้านค้าที่ไม่ได้รับการยืนยัน</h1>
+                        <h1 className="text-lg text-[rgb(0,0,0,0.5)]">ร้านค้าที่ถูกระงับ</h1>
                         <h1 className="text-4xl font-medium">50</h1>
                     </div>
                 </div>
@@ -40,8 +40,17 @@ export default function DashBoardShop () {
                         <Store width={24} height={24}/>
                     </div>
                     <div className="flex flex-col gap-1 justify-center items-center">
-                        <h1 className="text-lg text-[rgb(0,0,0,0.5)]">ร้านค้าที่ได้รับการยืนยัน</h1>
+                        <h1 className="text-lg text-[rgb(0,0,0,0.5)] text-nowrap">ร้านค้าที่ได้รับการยืนยัน</h1>
                         <h1 className="text-4xl font-medium">1700</h1>
+                    </div>
+                </div>
+                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
+                    <div className="p-4 rounded-full bg-[#FFE3BE]">
+                        <Store width={24} height={24} color="#8D4F00"/>
+                    </div>
+                    <div className="flex flex-col gap-1 justify-center items-center">
+                        <h1 className="text-lg text-[rgb(0,0,0,0.5)] text-nowrap">ร้านค้าไม่ได้ยืนยันบัญชี</h1>
+                        <h1 className="text-4xl font-medium">60</h1>
                     </div>
                 </div>
             </div>
@@ -51,7 +60,7 @@ export default function DashBoardShop () {
                         <h1 className="text-2xl font-medium">
                             ร้านค้า
                         </h1>
-                        <Link to="/allshop" className="underline">ดูทั้งหมด</Link>
+                        <Link to="/shops" className="underline">ดูทั้งหมด</Link>
                     </div>
                     <CardDashboardShop />
                     <CardDashboardShop />
