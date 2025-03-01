@@ -1,5 +1,5 @@
-import { Link, useLocation } from "@remix-run/react";
-import { LayoutDashboard, Store, User, Users, PlusCircle, LucideIcon } from "lucide-react";
+import { LayoutDashboard, PlusCircle, Store, User, Users, type LucideIcon } from "lucide-react";
+import { Link, useLocation } from "react-router";
 
 interface SidebarItemProps {
     icon: LucideIcon;

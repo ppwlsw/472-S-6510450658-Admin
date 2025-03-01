@@ -1,8 +1,7 @@
-import { Link, useLoaderData } from "@remix-run/react";
 import { Store } from "lucide-react";
 import CardDashboardShop from "~/components/card-dashboard-shop";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
 
 const data = [
     { name: "Sun", count: 10 },
@@ -20,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     const name = url.searchParams.get("name")?.toString() ?? "";
     const status = url.searchParams.get("status")?.toString() ?? "";
 
-    const res1 = await fetch("http://localhost/api/shops", {
+    const res1 = await fetch(`${process.env.BACKEND_URL}/shops`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -30,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     );
 
 
-    const res = await fetch(`http://localhost/api/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
+    const res = await fetch(`${process.env.BACKEND_URL}/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

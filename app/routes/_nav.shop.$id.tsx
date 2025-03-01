@@ -1,8 +1,8 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, Outlet, redirect, useLoaderData } from "@remix-run/react";
+import { type LoaderFunctionArgs } from 'react-router';
+import { Link, Outlet, redirect, useLoaderData } from 'react-router';
 import { MapPin, Phone, Mail, Clock, Info, Calendar, CheckCircle, ChevronLeft } from 'lucide-react';
 
-import Provider from "~/provider.server";
+import Provider from "~/provider";
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { id } = params;

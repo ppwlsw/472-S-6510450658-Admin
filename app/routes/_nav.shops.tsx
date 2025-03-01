@@ -1,7 +1,7 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, redirect, useFetcher, useLoaderData } from "@remix-run/react";
+import { type LoaderFunctionArgs } from "react-router";
+import { Link, redirect, useFetcher, useLoaderData } from "react-router";
 import { Store, ChevronRight, PlusCircle } from "lucide-react";
-import Provider, { setDefaultProvider } from "~/provider.server";
+import Provider, { setDefaultProvider } from "~/provider";
 
 export async function loader({ request }: LoaderFunctionArgs){
     const url = new URL(request.url);
@@ -9,7 +9,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     const name = url.searchParams.get("name")?.toString() ?? "";
     const status = url.searchParams.get("status")?.toString() ?? "";
     
-    const res1 = await fetch("http://localhost/api/shops", {
+    const res1 = await fetch(`${process.env.BACKEND_URL}/shops`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     );
 
 
-    const res = await fetch(`http://localhost/api/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
+    const res = await fetch(`${process.env.BACKEND_URL}/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

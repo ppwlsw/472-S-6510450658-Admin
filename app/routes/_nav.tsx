@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "@remix-run/react";
+import { Outlet, useLocation } from "react-router";
 import SidebarMenu from "~/components/sidebar-menu";
 
 export default function Nav() {

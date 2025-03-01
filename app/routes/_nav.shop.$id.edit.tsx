@@ -1,10 +1,7 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, redirect, useFetcher, useLoaderData } from "@remix-run/react";
-import { FC, useEffect, useState } from "react";
-import { useMapEvents } from "react-leaflet";
-import MapClient from "~/components/map";
+import { Link, redirect, useFetcher, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+import { useEffect, useState } from "react";
 
-import Provider, { setDefaultStatus } from "~/provider.server";
+import Provider, { setDefaultStatus } from "~/provider";
 
 interface MapClientProps {
     position: [number, number] | null;
@@ -13,7 +10,7 @@ interface MapClientProps {
 }
 
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
     const { id } = params;
 
     if (!id) {
@@ -40,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const status = Provider.Status[id];
 
     if (id !== "" || latitude !== "" || longitude !== "") {
-        const res = await fetch(`http://localhost/api/shops/${id}/location`, {
+        const res = await fetch(`${process.env.BACKEND_URL}/shops/${id}/location`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -51,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
                 longitude: longitude
             }),
         });
-
+        
         console.log(res);
     
         status.status = "success";
@@ -70,13 +67,17 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function EditShop() {
     const { id, shop } = useLoaderData<typeof loader>();
-    const [LeafletMap, setLeafletMap] = useState<FC | null>(null);
+    const [LeafletMap, setLeafletMap] = useState(null);
     const [position, setPosition] = useState<[number, number] | null>([shop.shopfilter.latitude,shop.shopfilter.longitude]);
     const fetcher = useFetcher<typeof action>();
     
     useEffect(() => {
-        import("~/components/map").then((mod) => setLeafletMap(() => mod.default));
-    }, []);
+        if (typeof window !== "undefined") {
+          import("~/components/map")
+            .then((mod) => setLeafletMap(() => mod.default))
+            .catch((err) => console.error("Leaflet failed to load", err));
+        }
+      }, []);
     
     return (
         <div className="bg-white p-6 rounded-lg shadow-md border-[1px] border-[rgb(0,0,0,0.1)] space-y-6">

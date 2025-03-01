@@ -1,6 +1,6 @@
-import { redirect, useFetcher } from "@remix-run/react";
 import { Eye, EyeOff } from "lucide-react";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { redirect, useFetcher } from "react-router";
 
 interface ActionMessage {
     message: string;
@@ -79,7 +79,7 @@ export async function action({ request }: { request: Request }) {
         }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
-    const response = await fetch("http://localhost/api/shops", {
+    const response = await fetch(`${process.env.BACKEND_URL}/shops`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export async function action({ request }: { request: Request }) {
             'longitude': positionArray[1],
         }),
     });
-    console.log(response);
+    
     if (!(response.status === 201)) {
         const message: ActionMessage = {
             message: "มีอีเมลนี้อยุ่ในระบบแล้ว",
@@ -110,15 +110,19 @@ export async function action({ request }: { request: Request }) {
 }
 
 export default function CreateShop() {
-    const [LeafletMap, setLeafletMap] = useState<FC | null>(null);
+    const [LeafletMap, setLeafletMap] = useState(null);
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const fetcher = useFetcher<ActionMessage>();
 
     useEffect(() => {
-      import("~/components/map").then((mod) => setLeafletMap(() => mod.default));
-    }, []);
+        if (typeof window !== "undefined") {
+          import("~/components/map")
+            .then((mod) => setLeafletMap(() => mod.default))
+            .catch((err) => console.error("Leaflet failed to load", err));
+        }
+      }, []);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);

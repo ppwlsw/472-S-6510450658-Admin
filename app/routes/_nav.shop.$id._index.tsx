@@ -1,8 +1,8 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, redirect, useLoaderData } from "@remix-run/react";
-import { FC, useEffect, useState } from "react";
+import type { LoaderFunctionArgs } from "react-router";
+import { Link, redirect, useLoaderData } from "react-router";
+import {useEffect, useState } from "react";
 
-import Provider, { setDefaultStatus } from "~/provider.server";
+import Provider, { setDefaultStatus } from "~/provider";
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { id } = params;
@@ -38,11 +38,15 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function Map() {
     const { id, shop, status } = useLoaderData<typeof loader>();
-    const [LeafletMap, setLeafletMap] = useState<FC | null>(null);
+    const [LeafletMap, setLeafletMap] = useState(null);
         
     useEffect(() => {
-        import("~/components/map").then((mod) => setLeafletMap(() => mod.default));
-    }, []);
+        if (typeof window !== "undefined") {
+          import("~/components/map")
+            .then((mod) => setLeafletMap(() => mod.default))
+            .catch((err) => console.error("Leaflet failed to load", err));
+        }
+      }, []);
     
 
     return (
