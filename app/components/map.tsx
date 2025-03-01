@@ -23,7 +23,7 @@ export default function MapClient({position, setPosition, className}: MapClientP
 
   return (
     <div className={`h-[500px] w-full ${className}`}>
-      <MapContainer center={setPosition != null ? [13.736717, 100.523186] : position} zoom={12} className="h-full w-full rounded-lg shadow-2xl hover:scale-95 transition-all duration-300">
+      <MapContainer center={setPosition != null ? !position?.[0] ? [13.736717, 100.523186] : position : position} zoom={12} className="h-full w-full rounded-lg shadow-2xl hover:scale-95 transition-all duration-300">
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {setPosition != null ? (
             <LocationMarker />

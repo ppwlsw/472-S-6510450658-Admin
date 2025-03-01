@@ -83,7 +83,7 @@ export async function action({ request }: { request: Request }) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer 1|ecKzh6r2rjmP2NIis5Kw8nukrgXDyIEFU4z0UAPb38e9fb70`,
+            "Authorization": `Bearer ${process.env.TOKEN}`,
         },
         body: JSON.stringify({
             'name': name,

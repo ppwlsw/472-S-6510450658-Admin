@@ -19,7 +19,23 @@ interface shopfilter {
     deleted_at: string;
 }
 
+interface statusMessage {
+    status: string;
+    message: string;
+    state: boolean;
+}
+
 let Provider: Record<string, Shop> = {};
+
+let Status: Record<string, statusMessage> = {};
+
+function setDefaultStatus(id: number) {
+    Status[id.toString()] = {
+        status: "none",
+        message: "",
+        state: false
+    };
+}
 
 function setDefaultProvider(id: number) {
     Provider[id] = {
@@ -42,5 +58,5 @@ function setDefaultProvider(id: number) {
     };
   }
 
-export default Provider;
-export { setDefaultProvider };
+export default { Provider, Status};
+export { setDefaultProvider, setDefaultStatus};

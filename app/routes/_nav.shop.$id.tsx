@@ -1,7 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { redirect, useLoaderData, useParams } from "@remix-run/react";
-import { MapPin, Phone, Mail, Clock, Info, Calendar, CheckCircle, XCircle, ChevronLeft } from 'lucide-react';
-import { FC, useEffect, useState } from "react";
+import { Link, Outlet, redirect, useLoaderData } from "@remix-run/react";
+import { MapPin, Phone, Mail, Clock, Info, Calendar, CheckCircle, ChevronLeft } from 'lucide-react';
 
 import Provider from "~/provider.server";
 
@@ -12,35 +11,38 @@ export async function loader({ params }: LoaderFunctionArgs) {
         return redirect("/shops");
     }
 
-    const shop = Provider[id];
+    const shop = Provider.Provider[id];
 
     if (!shop) {
         return redirect("/shops");
     }
 
-    console.log(shop);
-
-    return { shop };
+    return { 
+        id: id,
+        shop: shop 
+    };
 }
 
 export default function DetailShop() {
-    const { shop } = useLoaderData<typeof loader>();
-    const [LeafletMap, setLeafletMap] = useState<FC | null>(null);
-    
-    useEffect(() => {
-          import("~/components/map").then((mod) => setLeafletMap(() => mod.default));
-        }, []);
+    const { id, shop } = useLoaderData<typeof loader>();
 
     return (
-        <div className="max-w-4xl h-[90%] flex flex-col justify-center items-center mx-auto p-6 space-y-6 animate-fade-in">
+        <div className="max-w-full h-[90%] flex flex-col justify-center items-center mx-auto px-10 py-6 space-y-6 animate-fade-in">
             {/* Header Section */}
-            <div className="w-full flex flex-row items-center mt-8 gap-4">
-                <div onClick={() => window.history.back()} className="p-2 bg-white rounded-full shadow-md hover:shadow-lg hover:cursor-pointer transition-all duration-300 hover:bg-[rgb(0,0,0,0.01)]">
-                    <ChevronLeft className="w-6 h-6 text-gray-500" />
+            <div className="w-full flex flex-row justify-between items-center mt-8">
+                <div className="flex flex-row items-center gap-4">
+                    <Link to="/shops" className="p-2 bg-white rounded-full shadow-md hover:shadow-lg hover:cursor-pointer transition-all duration-300 hover:bg-[rgb(0,0,0,0.01)]">
+                        <ChevronLeft className="w-6 h-6 text-gray-500" />
+                    </Link>
+                    <h1 className="text-[rgb(0,0,0,0.5)]">
+                        รายละเอียดร้านค้า
+                    </h1>
                 </div>
-                <h1 className="text-[rgb(0,0,0,0.5)]">
-                    รายละเอียดร้านค้า
-                </h1>
+                <div className="hover:cursor-pointer">
+                    <div className="px-3 py-2 bg-red-500 text-white rounded-lg bg-opacity-95 transition-all duration-300 hover:bg-opacity-100">
+                        <h1>ระงับร้านค้า</h1>
+                    </div>
+                </div>
             </div>
             <div className="text-center space-y-2 my-8">
                 <h1 className="text-3xl font-bold text-gray-900">{shop.shopfilter.name}</h1>
@@ -60,7 +62,7 @@ export default function DetailShop() {
             </div>
 
             <div className="w-full grid md:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-md border-[1px] border-[rgb(0,0,0,0.1)] space-y-6">
+                <div className="w-full bg-white p-6 rounded-lg shadow-md border-[1px] border-[rgb(0,0,0,0.1)] space-y-6">
                     <div>
                         <h1 className="text-xl font-medium">ข้อมูลการติดต่อ</h1>
                     </div>
@@ -90,7 +92,7 @@ export default function DetailShop() {
                 </div>
 
                 {/* Description */}
-                <div className="bg-white p-6 rounded-lg shadow-md border-[1px] border-[rgb(0,0,0,0.1)] space-y-6">
+                <div className="w-full bg-white p-6 rounded-lg shadow-md border-[1px] border-[rgb(0,0,0,0.1)] space-y-6">
                     <div >
                         <h1 className="text-xl font-medium">รายละเอียดร้าน</h1>
                     </div>
@@ -103,16 +105,9 @@ export default function DetailShop() {
                 </div>
 
                 {/* Location */}
-                <div className="bg-white p-6 rounded-lg shadow-md border-[1px] border-[rgb(0,0,0,0.1)] space-y-6">
-                    <div>
-                        <h1 className="text-xl font-medium">พิกัดร้าน</h1>
-                    </div>
-                    <div>
-                        {LeafletMap ? <LeafletMap position={[shop.shopfilter.latitude, shop.shopfilter.longitude]} className="h-96" /> : <p>กำลังโหลดแผนที่...</p>}
-                    </div>
-                </div>
+                <Outlet/>
 
-                <div className="bg-white p-6 rounded-lg shadow-md border-[1px] border-[rgb(0,0,0,0.1)] space-y-6">
+                <div className="w-full bg-white p-6 rounded-lg shadow-md border-[1px] border-[rgb(0,0,0,0.1)] space-y-6">
                     <div>
                         <h1 className="text-xl font-medium">ข้อมูลเวลา</h1>
                     </div>

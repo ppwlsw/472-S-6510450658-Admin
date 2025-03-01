@@ -8,12 +8,12 @@ export async function loader({ request }: LoaderFunctionArgs){
     const page = Number(url.searchParams.get("page")) || 1;
     const name = url.searchParams.get("name")?.toString() ?? "";
     const status = url.searchParams.get("status")?.toString() ?? "";
-
+    
     const res1 = await fetch("http://localhost/api/shops", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer 1|ecKzh6r2rjmP2NIis5Kw8nukrgXDyIEFU4z0UAPb38e9fb70"
+            "Authorization": `Bearer ${process.env.TOKEN}`
         }
     }
     );
@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer 1|ecKzh6r2rjmP2NIis5Kw8nukrgXDyIEFU4z0UAPb38e9fb70"
+            "Authorization": `Bearer ${process.env.TOKEN}`
         }
     }
     );
@@ -85,12 +85,12 @@ export async function action({ request }: { request: Request }) {
         const shopIdStr = shopId?.toString();
         if (!shopIdStr) return redirect("/shops");
         
-        const shop = Provider[shopIdStr];
+        const shop = Provider.Provider[shopIdStr];
         if (!shop) {
             setDefaultProvider(Number(shopId));
         }
 
-        Provider[shopIdStr] = {
+        Provider.Provider[shopIdStr] = {
             shopfilter: {
                 id: shopIdStr,
                 name: name,
@@ -226,21 +226,21 @@ export default function AllShop(){
                     
                     <div className="flex flex-col h-full">
                             {shops.map((shop: any) => (
-                                <fetcher.Form method="post" className="odd:bg-[rgb(0,0,0,0.05)] flex flex-col transition-all duration-300 hover:bg-[rgb(0,0,0,0.1)] cursor-pointer">
-                                    <input type="hidden" name="shopId" value={shop.id} />
-                                    <input type="hidden" name="name" value={shop.name} />
-                                    <input type="hidden" name="email" value={shop.email} />
-                                    <input type="hidden" name="address" value={shop.address} />
-                                    <input type="hidden" name="phone" value={shop.phone} />
-                                    <input type="hidden" name="description" value={shop.description} />
-                                    <input type="hidden" name="is_verified" value={shop.is_verified} />
-                                    <input type="hidden" name="image_url" value={shop.image_url} />
-                                    <input type="hidden" name="is_open" value={shop.is_open} />
-                                    <input type="hidden" name="latitude" value={shop.latitude} />
-                                    <input type="hidden" name="longitude" value={shop.longitude} />
-                                    <input type="hidden" name="created_at" value={shop.created_at} />
-                                    <input type="hidden" name="updated_at" value={shop.updated_at} />
-                                    <input type="hidden" name="deleted_at" value={shop.deleted_at} />
+                                <fetcher.Form key={shop.id} method="post" className="odd:bg-[rgb(0,0,0,0.05)] flex flex-col transition-all duration-300 hover:bg-[rgb(0,0,0,0.1)] cursor-pointer">
+                                    <input type="hidden" name="shopId" value={shop.id ?? ""} />
+                                    <input type="hidden" name="name" value={shop.name ?? ""} />
+                                    <input type="hidden" name="email" value={shop.email ?? ""} />
+                                    <input type="hidden" name="address" value={shop.address ?? ""} />
+                                    <input type="hidden" name="phone" value={shop.phone ?? ""} />
+                                    <input type="hidden" name="description" value={shop.description ?? ""} />
+                                    <input type="hidden" name="is_verified" value={shop.is_verified ?? ""} />
+                                    <input type="hidden" name="image_url" value={shop.image_url ?? ""} />
+                                    <input type="hidden" name="is_open" value={shop.is_open ?? ""} />
+                                    <input type="hidden" name="latitude" value={shop.latitude ?? ""} />
+                                    <input type="hidden" name="longitude" value={shop.longitude ?? ""} />
+                                    <input type="hidden" name="created_at" value={shop.created_at ?? ""} />
+                                    <input type="hidden" name="updated_at" value={shop.updated_at ?? ""} />
+                                    <input type="hidden" name="deleted_at" value={shop.deleted_at ?? ""} />
 
                                     <button name="_action" value="show" type="submit" key={shop.id} className="relative grid grid-cols-2 md:grid-cols-5 gap-4  min-h-16 items-center ">
                                         <h1 className="px-2 md:px-4 text-left truncate">{shop.name}</h1>
