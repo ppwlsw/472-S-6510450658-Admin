@@ -34,5 +34,4 @@ const createHybridRouter = async (
 };
 
 export default createHybridRouter(() => [
-    
 ]) satisfies Promise<RouteConfig>;
