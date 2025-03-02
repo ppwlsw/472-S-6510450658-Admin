@@ -1,4 +1,4 @@
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { redirect, useFetcher, type ActionFunctionArgs } from "react-router";
 import Wave from "~/components/wave";
@@ -21,8 +21,6 @@ export async function action({ request }: ActionFunctionArgs) {
       password: formData.get("password") as string,
     });
 
-
-
     if (response.status !== 201) {
       return {
         message: "",
@@ -32,11 +30,11 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     if (response.data.role !== "ADMIN") {
-        return {
-            message: "",
-            error: "คุณไม่มีสิทธิ์เข้าใช้งาน",
-            status: 403,
-        };
+      return {
+        message: "",
+        error: "คุณไม่มีสิทธิ์เข้าใช้งาน",
+        status: 403,
+      };
     }
 
     const token: string = response.data.token;
@@ -185,6 +183,9 @@ export default function Login() {
             </span>
             <span className="inline-flex border-t-4 pt-4 border-white-smoke">
               แอดมิน
+            </span>
+            <span className="inline-flex border-t-4 pt-4 border-white-smoke">
+              <ShieldCheck size={36} />
             </span>
           </p>
           <div className="w-full mt-8">
