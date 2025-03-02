@@ -1,7 +1,78 @@
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
-import { useFetcher } from "react-router";
+import { redirect, useFetcher, type ActionFunctionArgs } from "react-router";
 import Wave from "~/components/wave";
+import { requestDecryptToken, requestLogin } from "~/services/auth";
+import { authCookie } from "~/services/cookie";
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const action: string = formData.get("_action") as string;
+  if (action === "default_login") {
+    formData.set("email", (formData.get("email") as string).toLowerCase());
+    const error = validateInput(formData);
+
+    if (error) {
+      return error;
+    }
+
+    const response = await requestLogin({
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+    });
+
+
+
+    if (response.status !== 201) {
+      return {
+        message: "",
+        error: response.error,
+        status: response.status,
+      };
+    }
+
+    if (response.data.role !== "ADMIN") {
+        return {
+            message: "",
+            error: "คุณไม่มีสิทธิ์เข้าใช้งาน",
+            status: 403,
+        };
+    }
+
+    const token: string = response.data.token;
+    const decrypted = (await requestDecryptToken(token)).data;
+    const cookie = await authCookie.serialize(decrypted);
+    return redirect("/dashboard/user", {
+      headers: {
+        "Set-Cookie": cookie,
+      },
+    });
+  }
+}
+
+function validateInput(formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  if (
+    !new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(
+      email as string
+    )
+  ) {
+    return {
+      message: "",
+      error: "กรุณากรอกอีเมล",
+      status: 400,
+    };
+  }
+  if (!password) {
+    return {
+      message: "",
+      error: "กรุณากรอกรหัสผ่าน",
+      status: 400,
+    };
+  }
+  return null;
+}
 
 interface InputFormProps {
   name: string;
@@ -77,7 +148,7 @@ function LoginFetcherForm() {
 
         <button
           name="_action"
-          value="login"
+          value="default_login"
           type="submit"
           className="bg-nature-blue text-white-smoke text-2xl font-bold p-6 rounded-full w-full"
         >
@@ -98,9 +169,9 @@ function LoginFetcherForm() {
 export default function Login() {
   return (
     <div className="flex flex-col h-svh w-svw justify-start items-center bg-white-smoke text-obsidian p-20 pt-0 overflow-hidden">
-        <Wave />
+      <Wave />
       <div className="h-fit">
-        <img src="/seeq-logo.png" alt="seeq-logo" className="h-48"/>
+        <img src="/seeq-logo.png" alt="seeq-logo" className="h-48" />
       </div>
 
       <div className="flex flex-row bg-white-smoke w-full drop-shadow-3xl rounded-lg p-3 pt-20 pb-20">
