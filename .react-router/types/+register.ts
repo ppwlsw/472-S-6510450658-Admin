@@ -10,9 +10,11 @@ type Params = {
   "/": {};
   "/login": {};
   "/hello": {};
+  "/createshop": {};
+  "/dashboard": {};
+  "/dashboard/queue": {};
   "/dashboard/shop": {};
   "/dashboard/user": {};
-  "/createshop": {};
   "/shop/:id": {
     "id": string;
   };

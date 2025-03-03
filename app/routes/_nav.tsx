@@ -5,6 +5,8 @@ export default function Nav() {
     const currentPath = useLocation().pathname;
 
     const pageTitles: Record<string, string> = {
+        "/dashboard": "ภาพรวมทั้งหมด",
+        "/dashboard/queue": "ภาพรวมของคิว",
         "/dashboard/shop": "ภาพรวมของร้านค้า",
         "/dashboard/user": "ภาพรวมของผู้ใช้",
         "/createshop": "เพิ่มบัญชีร้านค้า",

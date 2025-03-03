@@ -1,5 +1,5 @@
 // React Router generated types for route:
-// routes/_nav.dashboard.shop.tsx
+// routes/_nav.dashboard.queue.tsx
 
 import type * as T from "react-router/route-module"
 
@@ -7,13 +7,13 @@ import type { Info as Parent0 } from "../../+types/root.js"
 import type { Info as Parent1 } from "./_nav.js"
 import type { Info as Parent2 } from "./_nav.dashboard.js"
 
-type Module = typeof import("../_nav.dashboard.shop.js")
+type Module = typeof import("../_nav.dashboard.queue.js")
 
 export type Info = {
   parents: [Parent0, Parent1, Parent2],
-  id: "routes/_nav.dashboard.shop"
-  file: "routes/_nav.dashboard.shop.tsx"
-  path: "shop"
+  id: "routes/_nav.dashboard.queue"
+  file: "routes/_nav.dashboard.queue.tsx"
+  path: "queue"
   params: {} & { [key: string]: string | undefined }
   module: Module
   loaderData: T.CreateLoaderData<Module>
