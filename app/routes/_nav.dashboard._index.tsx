@@ -1,5 +1,6 @@
 import { Store, User } from "lucide-react";
-import { useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import CardDashboardShop from "~/components/card-dashboard-shop";
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const res = await fetch(`${process.env.BACKEND_URL}/shops`, {
@@ -19,7 +20,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
         }
     }
     );
-
 
     const jsonAllShop = await res.json();
     const jsonAllCustomer = await resCustomer.json();
@@ -59,6 +59,48 @@ export default function DashBoardAll() {
                     <div className="flex flex-col gap-1 justify-center items-center">
                         <h1 className="text-lg text-[rgb(0,0,0,0.5)]">ลูกค้าทั้งหมด</h1>
                         <h1 className="text-4xl font-medium">{totalCustomers}</h1>
+                    </div>
+                </div>
+            </div>
+            <div className="flex flex-row gap-4 px-10 pt-10 animate-fade-in">
+                <div className="w-full flex flex-col gap-4">
+                    <div className="w-full flex flex-row gap-4">
+                        <div className="w-full">
+                            <h1 className="text-2xl">
+                                ร้านค้าทั้งหมด
+                            </h1>
+                        </div>
+                        <div className="w-full">
+                            <h1 className="text-2xl">
+                                ลูกค้าทั้งหมด
+                            </h1>
+                        </div>
+                    </div>
+                    <div className="w-full flex flex-row gap-4">
+                        <div className="h-fit w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
+                            <div className="">
+                                {
+                                    shops.slice(0, 9).map((shop: any) => (
+                                        <div key={shop.id}>
+                                            <CardDashboardShop shop={shop} />
+                                            <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                        <div className="h-fit w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
+                            <div className="">
+                                {
+                                    shops.slice(0, 9).map((shop: any) => (
+                                        <div key={shop.id}>
+                                            <CardDashboardShop shop={shop} />
+                                            <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

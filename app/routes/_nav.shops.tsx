@@ -9,7 +9,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     const name = url.searchParams.get("name")?.toString() ?? "";
     const status = url.searchParams.get("status")?.toString() ?? "";
     
-    const res1 = await fetch(`${process.env.BACKEND_URL}/shops`, {
+    const res1 = await fetch(`${process.env.BACKEND_URL}/shops/withTrashed`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -116,6 +116,16 @@ export async function action({ request }: { request: Request }) {
 export default function AllShop(){
     const { shops, paginationLinks, paginationMeta, name, status, stats } = useLoaderData<typeof loader>();
     const fetcher = useFetcher<typeof action>();
+
+    function checkStatus(shop: any) {
+        if (shop.is_verified === true && shop.deleted_at != null) {
+            return "ถูกระงับ";
+        } else if (shop.is_verified === true && shop.deleted_at == null) {
+            return "ยืนยันแล้ว";
+        } else if (shop.is_verified === false) {
+            return "รอยืนยัน";
+        }
+    }
 
     return (
         <div className="w-full h-[93%] flex flex-col justify-center">
@@ -247,7 +257,7 @@ export default function AllShop(){
                                         <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.email}</h1>
                                         <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.phone}</h1>
                                         <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.address}</h1>
-                                        <h1 className="px-2 md:px-4 text-left">{shop.is_verified ? "ยืนยันแล้ว" : "ยังไม่ยืนยัน"}</h1>
+                                        <h1 className="px-2 md:px-4 text-left">{checkStatus(shop)}</h1>
                                         <ChevronRight className="absolute right-2 md:right-4" width={20} height={20}/>
                                     </button>
                                 </fetcher.Form>

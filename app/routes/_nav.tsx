@@ -19,7 +19,7 @@ export default function Nav() {
             <SidebarMenu />
             <div className="w-[257px]"></div>
             <main className="bg-gray-100">
-                <div className="w-full flex flex-row justify-between items-center p-4 border-b-[1px] border-b-[rgb(0,0,0,0.1)] bg-white text-black">
+                <div className="z-20 w-full flex flex-row justify-between items-center p-4 border-b-[1px] border-b-[rgb(0,0,0,0.1)] bg-white text-black">
                     <h1 className="text-lg font-semibold">
                         {pageTitles[currentPath]}
                     </h1>

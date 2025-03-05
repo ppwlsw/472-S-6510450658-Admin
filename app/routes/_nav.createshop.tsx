@@ -110,7 +110,7 @@ export async function action({ request }: { request: Request }) {
 }
 
 export default function CreateShop() {
-    const [LeafletMap, setLeafletMap] = useState(null);
+    const [LeafletMap, setLeafletMap] = useState<React.ComponentType<{ position: [number, number] | null, setPosition: React.Dispatch<React.SetStateAction<[number, number] | null>> }> | null>(null);
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
