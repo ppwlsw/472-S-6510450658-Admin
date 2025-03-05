@@ -47,8 +47,21 @@ export async function action({ request }: ActionFunctionArgs) {
       user_id: user_id,
       role: role,
     });
+    
+    const resDecryptToken = await fetch(`${process.env.BACKEND_URL}/auth/decrypt`, {
+      method: "POST",
+      body: formData,
+    });
 
-    return redirect("/hello", {
+    if (!resDecryptToken.ok) {
+      return {
+        message: "",
+        error: "เกิดข้อผิดพลาด",
+        status: 500,
+      };
+    }
+    
+    return redirect("/dashboard", {
       headers: {
         "Set-Cookie": cookie,
       },

@@ -25,6 +25,14 @@ interface statusMessage {
     state: boolean;
 }
 
+interface adminProvider {
+    user_id: number;
+    token: string;
+    role: string;
+}
+
+let adminProvider: Record<number, adminProvider> = {};
+
 let Provider: Record<string, Shop> = {};
 
 let Status: Record<string, statusMessage> = {};
@@ -58,5 +66,5 @@ function setDefaultProvider(id: number) {
     };
   }
 
-export default { Provider, Status};
+export default { Provider, Status, adminProvider };
 export { setDefaultProvider, setDefaultStatus};
