@@ -38,9 +38,17 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     const token: string = response.data.token;
+    const user_id: string = response.data.id;
+    const role: string = response.data.role;
+
     const decrypted = (await requestDecryptToken(token)).data;
-    const cookie = await authCookie.serialize(decrypted);
-    return redirect("/dashboard/user", {
+    const cookie = await authCookie.serialize({
+      token: decrypted,
+      user_id: user_id,
+      role: role,
+    });
+
+    return redirect("/hello", {
       headers: {
         "Set-Cookie": cookie,
       },
