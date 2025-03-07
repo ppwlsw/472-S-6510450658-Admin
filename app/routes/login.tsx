@@ -1,4 +1,4 @@
-import { Eye, EyeClosed, ShieldCheck } from "lucide-react";
+import { Eye, EyeClosed, SearchCheck, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { redirect, useFetcher, type ActionFunctionArgs } from "react-router";
 import Wave from "~/components/wave";
@@ -47,21 +47,8 @@ export async function action({ request }: ActionFunctionArgs) {
       user_id: user_id,
       role: role,
     });
-    
-    const resDecryptToken = await fetch(`${process.env.BACKEND_URL}/auth/decrypt`, {
-      method: "POST",
-      body: formData,
-    });
 
-    if (!resDecryptToken.ok) {
-      return {
-        message: "",
-        error: "เกิดข้อผิดพลาด",
-        status: 500,
-      };
-    }
-    
-    return redirect("/dashboard", {
+    return redirect("/hello", {
       headers: {
         "Set-Cookie": cookie,
       },
@@ -187,31 +174,45 @@ function LoginFetcherForm() {
 
 export default function Login() {
   return (
-    <div className="flex flex-col h-svh w-svw justify-start items-center bg-white-smoke text-obsidian p-20 pt-0 overflow-hidden">
-      <Wave />
-      <div className="h-fit">
-        <img src="/seeq-logo.png" alt="seeq-logo" className="h-48" />
+    <div className="flex flex-col h-svh w-svw bg-white-smoke relative">
+      {/* Main content */}
+      <div className="flex flex-col h-full w-full justify-start items-center text-obsidian p-20 pt-0 z-10 overflow-hidden">
+        <div className="h-fit">
+          <img src="/seeq-logo.png" alt="seeq-logo" className="h-48" />
+        </div>
+        <div className="flex flex-row bg-white-smoke w-full drop-shadow-3xl rounded-lg p-3 pt-20 pb-20">
+          <div className="flex justify-center items-center w-full border-r-[0.1px] border-gray-300">
+            <img src="/admin-logo.png" alt="admin-logo" className="w-2/3" />
+          </div>
+          <div className="flex flex-col justify-center w-full border-l-[0.1px] border-gray-300 pl-28 pr-28">
+            <p className="flex flex-row items-center text-4xl mb-6 gap-3">
+              <span className="inline-flex border-t-4 pt-4 border-nature-blue">
+                เข้าสู่ระบบ
+              </span>
+              <span className="inline-flex border-t-4 pt-4 border-white-smoke">
+                แอดมิน
+              </span>
+              <span className="inline-flex border-t-4 pt-4 border-white-smoke">
+                <ShieldCheck size={36} />
+              </span>
+            </p>
+            <div className="w-full mt-8">
+              <LoginFetcherForm />
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-row bg-white-smoke w-full drop-shadow-3xl rounded-lg p-3 pt-20 pb-20">
-        <div className="flex justify-center items-center w-full border-r-[0.1px] border-gray-300">
-          <img src="/admin-logo.png" alt="admin-logo" className="w-2/3" />
-        </div>
-        <div className="flex flex-col justify-center w-full border-l-[0.1px] border-gray-300 pl-28 pr-28">
-          <p className="flex flex-row  items-center text-4xl mb-6 gap-3">
-            <span className="inline-flex border-t-4 pt-4 border-nature-blue">
-              เข้าสู่ระบบ
-            </span>
-            <span className="inline-flex border-t-4 pt-4 border-white-smoke">
-              แอดมิน
-            </span>
-            <span className="inline-flex border-t-4 pt-4 border-white-smoke">
-              <ShieldCheck size={36} />
-            </span>
-          </p>
-          <div className="w-full mt-8">
-            <LoginFetcherForm />
-          </div>
+      {/* Wave at the bottom */}
+      <div className="absolute bottom-0 left-0 w-full">
+        <Wave />
+      </div>
+
+      <div className="flex flex-col justify-center items-center absolute w-full h-full z-50 text-obsidian ">
+        <div className="relative w-full h-full bg-obsidian opacity-25"></div>
+        <div className="flex flex-col justify-center items-center gap-3 absolute rounded-lg shadow-lg bg-white-smoke p-6">
+          <p className="text-xl text-obsidian">เข้าสู่ระบบสำเร็จ</p>
+          <SearchCheck size={64} color="oklch(0.723 0.219 149.579)"/>
         </div>
       </div>
     </div>
