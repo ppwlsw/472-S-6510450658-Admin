@@ -1,5 +1,5 @@
 services:
-  remix-app:
+  admin.seeq.frontend:
     image: oven/bun:1.2.3
     ports:
       - "3001:5173"
