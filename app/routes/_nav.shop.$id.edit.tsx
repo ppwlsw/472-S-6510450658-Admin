@@ -29,10 +29,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         shop: shop
     };
 }
+
 export async function action({ request }: ActionFunctionArgs) {
     const auth = await getAuthCookie({request: request});
     const formData = await request.formData();
     const id = formData.get("id") as string;
+    const address = formData.get("address");
     const latitude = formData.get("latitude");
     const longitude = formData.get("longitude");
     const shop = Provider.Provider[id];
@@ -47,7 +49,8 @@ export async function action({ request }: ActionFunctionArgs) {
             },
             body: JSON.stringify({
                 latitude: latitude,
-                longitude: longitude
+                longitude: longitude,
+                address: address
             }),
         });
         
@@ -58,6 +61,7 @@ export async function action({ request }: ActionFunctionArgs) {
     
         shop.shopfilter.latitude = parseFloat(latitude as string);
         shop.shopfilter.longitude = parseFloat(longitude as string);
+        shop.shopfilter.address = address as string;
     }else{
         status.status = "error";
         status.message = "อัปเดตพิกัดร้านไม่สำเร็จ";
@@ -67,12 +71,21 @@ export async function action({ request }: ActionFunctionArgs) {
     return redirect(`/shop/${id}`);
 }
 
+interface MapClientProps {
+    position: [number, number] | null;
+    setPosition: (position: [number, number] | null) => void;
+    className?: string;
+    placeName?: string | null;
+    setPlaceName?: (placeName: string) => void;
+}
+
 export default function EditShop() {
     const { id, shop } = useLoaderData<typeof loader>();
-    const [LeafletMap, setLeafletMap] = useState<React.ComponentType<{ position: [number, number] | null, setPosition: React.Dispatch<React.SetStateAction<[number, number] | null>>, className?: string }> | null>(null);
+    const [LeafletMap, setLeafletMap] = useState<React.ComponentType<MapClientProps> | null>(null);
     const [position, setPosition] = useState<[number, number] | null>([shop.shopfilter.latitude,shop.shopfilter.longitude]);
     const fetcher = useFetcher<typeof action>();
-    
+    const [placeName, setPlaceName] = useState<string | null>(null);
+
     useEffect(() => {
         if (typeof window !== "undefined") {
           import("~/components/map")
@@ -93,6 +106,7 @@ export default function EditShop() {
                     </Link>
                     <fetcher.Form method="post">
                         <input type="hidden" name="id" value={id} />
+                        <input type="hidden" name="address" value={placeName ?? ""}/>
                         <input type="hidden" name="latitude" value={position?.[0] ?? ""} />
                         <input type="hidden" name="longitude" value={position?.[1] ?? ""} />
                         <button type="submit" className="px-3 py-2 bg-green-500 text-white rounded-lg bg-opacity-95 transition-all duration-300 hover:bg-opacity-100">
@@ -102,7 +116,7 @@ export default function EditShop() {
                 </div>
             </div>
             <div>
-                {LeafletMap ? <LeafletMap position={position} setPosition={setPosition} className="h-96" /> : <p>กำลังโหลดแผนที่...</p>}
+                {LeafletMap ? <LeafletMap position={position} setPosition={setPosition} placeName={placeName} setPlaceName={setPlaceName} className="h-96" /> : <p>กำลังโหลดแผนที่...</p>}
             </div>
 
         </div>

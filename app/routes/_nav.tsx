@@ -18,10 +18,10 @@ export default function Nav() {
     return (
         <div className="flex flex-row min-h-screen">
             <SidebarMenu />
-            <nav className="h-screen max-sm:hidden sm:w-fit lg:w-[257px] bg-white text-black border-r-[1px] border-r-[rgb(0,0,0,0.09)] transition-all duration-300">
+            <nav className="h-screen max-sm:hidden sm:w-fit lg:w-[257px] bg-white border-r-[1px] border-r-[rgb(0,0,0,0.09)] transition-all duration-300">
                 <div className="w-full flex flex-row justify-between items-center p-4 border-b-[1px] border-b-[rgb(0,0,0,0.1)]">
                     <h1 className="text-lg font-semibold text-nowrap">
-                    SeeQ-Admin
+                        SeeQ-Admin
                     </h1>
                 </div>
                 <div className="flex flex-col p-4">

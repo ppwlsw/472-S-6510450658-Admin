@@ -58,7 +58,7 @@ export default function SidebarMenu() {
         <nav className="fixed top-0 left-0 z-10 h-screen max-sm:hidden sm:w-fit bg-white text-black border-r-[1px] border-r-[rgb(0,0,0,0.09)] lg:w-[257px] transition-all duration-300">
             <div className="w-full flex flex-row justify-between items-center p-4 border-b-[1px] border-b-[rgb(0,0,0,0.1)]">
                 <h1 className="text-lg font-semibold">
-                SeeQ-Admin
+                    SeeQ-Admin
                 </h1>
             </div>
             <div className="flex flex-col p-4">
