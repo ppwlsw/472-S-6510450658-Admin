@@ -41,26 +41,13 @@ export async function action({ request }: ActionFunctionArgs) {
     const user_id: string = response.data.id;
     const role: string = response.data.role;
 
-    const decrypted = (await requestDecryptToken(token)).data;
+    const decrypted = (await requestDecryptToken(token)).data.plain_text;
     const cookie = await authCookie.serialize({
       token: decrypted,
       user_id: user_id,
       role: role,
     });
-    
-    const resDecryptToken = await fetch(`${process.env.BACKEND_URL}/auth/decrypt`, {
-      method: "POST",
-      body: formData,
-    });
 
-    if (!resDecryptToken.ok) {
-      return {
-        message: "",
-        error: "เกิดข้อผิดพลาด",
-        status: 500,
-      };
-    }
-    
     return redirect("/dashboard", {
       headers: {
         "Set-Cookie": cookie,

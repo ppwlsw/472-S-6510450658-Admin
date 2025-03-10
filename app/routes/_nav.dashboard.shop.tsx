@@ -2,6 +2,7 @@ import { Store } from "lucide-react";
 import CardDashboardShop from "~/components/card-dashboard-shop";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, BarChart } from "recharts";
 import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { getAuthCookie } from "~/services/cookie";
 
 const data = [
     { name: "Sun", count: 10 },
@@ -60,6 +61,7 @@ const queueLogData = [
 
 
 export async function loader({ request }: LoaderFunctionArgs){
+    const auth = await getAuthCookie({request: request});
     const url = new URL(request.url);
     const page = Number(url.searchParams.get("page")) || 1;
     const name = url.searchParams.get("name")?.toString() ?? "";
@@ -69,7 +71,7 @@ export async function loader({ request }: LoaderFunctionArgs){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.TOKEN}`,
+            "Authorization": `Bearer ${auth.token}`,
         }
     }
     );
@@ -79,7 +81,7 @@ export async function loader({ request }: LoaderFunctionArgs){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.TOKEN}`,
+            "Authorization": `Bearer ${auth.token}`,
         }
     }
     );

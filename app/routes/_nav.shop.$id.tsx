@@ -4,6 +4,7 @@ import { MapPin, Phone, Mail, Clock, Info, Calendar, CheckCircle, ChevronLeft } 
 
 import Provider, { setDefaultStatus } from "~/provider";
 import { useEffect, useRef } from 'react';
+import { getAuthCookie } from '~/services/cookie';
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { id } = params;
@@ -26,6 +27,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+    const auth = await getAuthCookie({request: request});
     const formData = await request.formData();
     const action = formData.get("_action") as string;
     const id = formData.get("id") as string;
@@ -41,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.TOKEN}`
+                "Authorization": `Bearer ${auth.token}`
             },
         });
 
@@ -57,7 +59,7 @@ export async function action({ request }: ActionFunctionArgs) {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.TOKEN}`
+                "Authorization": `Bearer ${auth.token}`
             },
         });
 
@@ -244,7 +246,7 @@ export default function DetailShop() {
                             </div>
                         </div>
                     </div>
-                    <div ref={restorePopoverRef} id="restore-popover" popover="" className='top-[75%] left-[70%] transition-all animate-fade-in'>
+                    <div  id="restore-popover" popover="" className='top-[75%] left-[70%] transition-all animate-fade-in' style={{display: fetcher.data?.restore === true ? 'none' : ''}}>
                         <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] text-center">
                             <h2 className="text-xl font-semibold mb-4">คุณต้องการกู้คืนร้านค้านี้หรือไม่?</h2>
                             <p className="text-gray-600 mb-4">หากยืนยัน ร้านค้านี้จะสามารถใช้งานได้อีกครั้ง</p>

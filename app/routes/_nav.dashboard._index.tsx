@@ -1,13 +1,16 @@
 import { Store, User } from "lucide-react";
-import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { Link, redirect, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import CardDashboardShop from "~/components/card-dashboard-shop";
+import { getAuthCookie } from "~/services/cookie";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+    const auth = await getAuthCookie({request: request});
+    
     const res = await fetch(`${process.env.BACKEND_URL}/shops`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.TOKEN}`,
+            "Authorization": `Bearer ${auth.token}`,
         }
     }
     );
@@ -16,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.TOKEN}`,
+            "Authorization": `Bearer ${auth.token}`,
         }
     }
     );

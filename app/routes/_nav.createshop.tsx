@@ -1,6 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { redirect, useFetcher } from "react-router";
+import { getAuthCookie } from "~/services/cookie";
 
 interface ActionMessage {
     message: string;
@@ -9,6 +10,7 @@ interface ActionMessage {
   }
 
 export async function action({ request }: { request: Request }) {
+    const auth = await getAuthCookie({request: request});
     const formData = await request.formData();
 
     const positionRaw = formData.get("position") as string;
@@ -79,11 +81,11 @@ export async function action({ request }: { request: Request }) {
         }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
-    const response = await fetch(`${process.env.BACKEND_URL}/shops`, {
+    const response = await fetch(`${auth.token}/shops`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.TOKEN}`,
+            "Authorization": `Bearer ${auth.token}`,
         },
         body: JSON.stringify({
             'name': name,
