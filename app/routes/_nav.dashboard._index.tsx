@@ -44,7 +44,7 @@ export default function DashBoardAll() {
     const { shops, customers, totalShops, totalCustomers } = useLoaderData<typeof loader>();
 
     return (
-        <div className="">
+        <div className="w-full h-full py-10">
             <div className="w-full flex flex-col justify-between gap-4 xl:flex-row px-10 pt-10">
                 <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
                     <div className="p-4 rounded-full bg-[#C8C3F4]">
@@ -65,9 +65,9 @@ export default function DashBoardAll() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row gap-4 px-10 pt-10 animate-fade-in">
-                <div className="w-full flex flex-col gap-4">
-                    <div className="w-full flex flex-row gap-4">
+            <div className="flex flex-col gap-4 px-10 pt-10 animate-fade-in lg:flex-row">
+                <div className="w-full flex flex-col lg:flex-row gap-4">
+                    {/* <div className="w-full flex flex-row gap-4">
                         <div className="w-full">
                             <h1 className="text-2xl">
                                 ร้านค้าทั้งหมด
@@ -78,30 +78,44 @@ export default function DashBoardAll() {
                                 ลูกค้าทั้งหมด
                             </h1>
                         </div>
-                    </div>
-                    <div className="w-full flex flex-row gap-4">
-                        <div className="h-fit w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
-                            <div className="">
-                                {
-                                    shops.slice(0, 9).map((shop: any) => (
-                                        <div key={shop.id}>
-                                            <CardDashboardShop shop={shop} />
-                                            <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
-                                        </div>
-                                    ))
-                                }
+                    </div> */}
+                    <div className="w-full flex flex-col gap-4 lg:flex-row">
+                        <div className="w-full flex flex-col gap-6">
+                            <div className="w-full">
+                                <h1 className="text-2xl">
+                                    ร้านค้าทั้งหมด
+                                </h1>
+                            </div>
+                            <div className="h-fit w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
+                                <div className="">
+                                    {
+                                        shops.slice(0, 9).map((shop: any) => (
+                                            <div key={shop.id}>
+                                                <CardDashboardShop shop={shop} />
+                                                <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
                             </div>
                         </div>
-                        <div className="h-fit w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
-                            <div className="">
-                                {
-                                    shops.slice(0, 9).map((shop: any) => (
-                                        <div key={shop.id}>
-                                            <CardDashboardShop shop={shop} />
-                                            <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
-                                        </div>
-                                    ))
-                                }
+                        <div className="w-full flex flex-col gap-6">
+                            <div className="w-full">
+                                <h1 className="text-2xl">
+                                    ลูกค้าทั้งหมด
+                                </h1>
+                            </div>
+                            <div className="h-fit w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
+                                <div className="">
+                                    {
+                                        shops.slice(0, 9).map((shop: any) => (
+                                            <div key={shop.id}>
+                                                <CardDashboardShop shop={shop} />
+                                                <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
