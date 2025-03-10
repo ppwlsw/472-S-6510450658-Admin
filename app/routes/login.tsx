@@ -42,14 +42,14 @@ export async function action({ request }: ActionFunctionArgs) {
     const user_id: string = response.data.id;
     const role: string = response.data.role;
 
-    const decrypted = (await requestDecryptToken(token)).data;
+    const decrypted = (await requestDecryptToken(token)).data.plain_text;
     const cookie = await authCookie.serialize({
       token: decrypted,
       user_id: user_id,
       role: role,
     });
 
-    return redirect("/hello", {
+    return redirect("/dashboard", {
       headers: {
         "Set-Cookie": cookie,
       },

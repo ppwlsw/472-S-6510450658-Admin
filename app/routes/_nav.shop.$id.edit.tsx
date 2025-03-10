@@ -2,6 +2,7 @@ import { Link, redirect, useFetcher, useLoaderData, type ActionFunctionArgs, typ
 import { useEffect, useState } from "react";
 
 import Provider, { setDefaultStatus } from "~/provider";
+import { getAuthCookie } from "~/services/cookie";
 
 interface MapClientProps {
     position: [number, number] | null;
@@ -29,6 +30,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     };
 }
 export async function action({ request }: ActionFunctionArgs) {
+    const auth = await getAuthCookie({request: request});
     const formData = await request.formData();
     const id = formData.get("id") as string;
     const latitude = formData.get("latitude");
@@ -41,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.TOKEN}`
+                "Authorization": `Bearer ${auth.token}`
             },
             body: JSON.stringify({
                 latitude: latitude,
@@ -67,7 +69,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function EditShop() {
     const { id, shop } = useLoaderData<typeof loader>();
-    const [LeafletMap, setLeafletMap] = useState(null);
+    const [LeafletMap, setLeafletMap] = useState<React.ComponentType<{ position: [number, number] | null, setPosition: React.Dispatch<React.SetStateAction<[number, number] | null>>, className?: string }> | null>(null);
     const [position, setPosition] = useState<[number, number] | null>([shop.shopfilter.latitude,shop.shopfilter.longitude]);
     const fetcher = useFetcher<typeof action>();
     

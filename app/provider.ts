@@ -25,17 +25,45 @@ interface statusMessage {
     state: boolean;
 }
 
-interface adminProvider {
-    user_id: number;
-    token: string;
-    role: string;
+interface User {
+    userfilter: userfilter;
 }
 
-let adminProvider: Record<number, adminProvider> = {};
+interface userfilter {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    image_url: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+    is_verified: boolean;
+}
 
 let Provider: Record<string, Shop> = {};
 
+let UserProvider: Record<string, User> = {};
+
 let Status: Record<string, statusMessage> = {};
+
+function setDefaultUserProvider(id: string) {
+    UserProvider[id] = {
+        userfilter: {
+            id: id,
+            name: "",
+            email: "",
+            phone: "",
+            role: "",
+            image_url: "",
+            created_at: "",
+            updated_at: "",
+            deleted_at: "",
+            is_verified: false
+        }
+    };
+}
 
 function setDefaultStatus(id: number) {
     Status[id.toString()] = {
@@ -66,5 +94,5 @@ function setDefaultProvider(id: number) {
     };
   }
 
-export default { Provider, Status, adminProvider };
-export { setDefaultProvider, setDefaultStatus};
+export default { Provider, Status, UserProvider };
+export { setDefaultProvider, setDefaultStatus, setDefaultUserProvider };
