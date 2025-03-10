@@ -2,8 +2,10 @@ import { type LoaderFunctionArgs } from "react-router";
 import { Link, redirect, useFetcher, useLoaderData } from "react-router";
 import { Store, ChevronRight, PlusCircle } from "lucide-react";
 import Provider, { setDefaultProvider } from "~/provider";
+import { getAuthCookie } from "~/services/cookie";
 
 export async function loader({ request }: LoaderFunctionArgs){
+    const auth = await getAuthCookie({request: request});
     const url = new URL(request.url);
     const page = Number(url.searchParams.get("page")) || 1;
     const name = url.searchParams.get("name")?.toString() ?? "";
@@ -13,7 +15,7 @@ export async function loader({ request }: LoaderFunctionArgs){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.TOKEN}`
+            "Authorization": `Bearer ${auth.token}`
         }
     }
     );
@@ -23,7 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.TOKEN}`
+            "Authorization": `Bearer ${auth.token}`
         }
     }
     );
@@ -130,7 +132,7 @@ export default function AllShop(){
     return (
         <div className="w-full h-[93%] flex flex-col justify-center">
             <div className="w-full flex flex-col justify-between px-10 pt-10 gap-4 xl:flex-row">
-                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
+                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-down">
                     <div className="p-4 rounded-full bg-[#C8C3F4]">
                         <Store width={24} height={24}/>
                     </div>
@@ -139,7 +141,7 @@ export default function AllShop(){
                         <h1 className="text-4xl font-medium">{ stats.totalShops }</h1>
                     </div>
                 </div>
-                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
+                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-down">
                     <div className="p-4 rounded-full bg-[#FC5A5A]">
                         <Store width={24} height={24} color="#a93d3d"/>
                     </div>
@@ -148,7 +150,7 @@ export default function AllShop(){
                         <h1 className="text-4xl font-medium">{ stats.totalBan }</h1>
                     </div>
                 </div>
-                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
+                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-down">
                     <div className="p-4 rounded-full bg-[#C5FFC2]">
                         <Store width={24} height={24}/>
                     </div>
@@ -157,7 +159,7 @@ export default function AllShop(){
                         <h1 className="text-4xl font-medium">{ stats.totalConfirm }</h1>
                     </div>
                 </div>
-                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
+                <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-down">
                     <div className="p-4 rounded-full bg-[#FFE3BE]">
                         <Store width={24} height={24} color="#8D4F00"/>
                     </div>
@@ -168,8 +170,8 @@ export default function AllShop(){
                 </div>
             </div>
 
-            <div className="w-full h-full p-10 ">
-                <div className="w-full h-full flex flex-col bg-white p-10 rounded-xl shadow-md gap-5 animate-fade-in">
+            <div className="w-full h-full p-10 animate-up">
+                <div className="w-full h-full flex flex-col bg-white p-10 rounded-xl shadow-md gap-5">
                     <div className="w-full flex flex-col justify-between items-center lg:flex-row">
                         <h1 className="font-normal text-2xl">ร้านค้า</h1>
                         <div className="flex flex-wrap gap-4 items-center">
@@ -252,7 +254,7 @@ export default function AllShop(){
                                     <input type="hidden" name="updated_at" value={shop.updated_at ?? ""} />
                                     <input type="hidden" name="deleted_at" value={shop.deleted_at ?? ""} />
 
-                                    <button name="_action" value="show" type="submit" key={shop.id} className="relative grid grid-cols-2 md:grid-cols-5 gap-4  min-h-16 items-center ">
+                                    <button name="_action" value="show" type="submit" key={shop.id} className="relative grid grid-cols-2 md:grid-cols-5 gap-4  min-h-16 items-center cursor-pointer">
                                         <h1 className="px-2 md:px-4 text-left truncate">{shop.name}</h1>
                                         <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.email}</h1>
                                         <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.phone}</h1>

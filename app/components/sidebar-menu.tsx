@@ -77,7 +77,7 @@ export default function SidebarMenu() {
                 <li className="py-2 px-4"><SidebarItem icon={LayoutDashboard} gap={1} text="ภาพรวม" path="/dashboard" currentPath={currentPath} className="shadow-sm"/></li>
                 <li className="py-2 px-4"><SidebarItem icon={PlusCircle} gap={1} text="เพิ่มบัญชีร้านค้า" path="/createshop" currentPath={currentPath} className="shadow-sm"/></li>
                 <li className="py-2 px-4"><SidebarItem icon={Store} gap={1} text="ร้านค้าทั้งหมด" path="/shops" currentPath={currentPath} className="shadow-sm"/></li>
-                <li className="py-2 px-4"><SidebarItem icon={Users} gap={1} text="ผู้ใช้ทั้งหมด" path="/users" currentPath={currentPath} className="shadow-sm"/></li>
+                <li className="py-2 px-4"><SidebarItem icon={Users} gap={1} text="ลูกค้าทั้งหมด" path="/users" currentPath={currentPath} className="shadow-sm"/></li>
             </ul>
 
         <div className="absolute bottom-10 left-0 right-0 py-2 px-4 h-[50%] flex flex-col justify-end">
