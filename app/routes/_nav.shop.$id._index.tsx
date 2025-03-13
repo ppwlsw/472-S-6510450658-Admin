@@ -36,9 +36,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
     };
 }
 
+interface MapClientProps {
+    position: [number, number] | null;
+    setPosition: (position: [number, number] | null) => void;
+    className?: string;
+    placeName?: string | null;
+    setPlaceName?: (placeName: string) => void;
+}
+
 export default function Map() {
     const { id, shop, status } = useLoaderData<typeof loader>();
-    const [LeafletMap, setLeafletMap] = useState(null);
+    const [LeafletMap, setLeafletMap] = useState<React.ComponentType<MapClientProps> | null>(null);
         
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -71,7 +79,7 @@ export default function Map() {
             </div>
         </div>
         <div>
-            {LeafletMap ? <LeafletMap position={[shop.shopfilter.latitude, shop.shopfilter.longitude]} setPosition={""} className="h-96" /> : <p>กำลังโหลดแผนที่...</p>}
+            {LeafletMap ? <LeafletMap position={[shop.shopfilter.latitude, shop.shopfilter.longitude]} setPosition={() => {}} className="h-96" /> : <p>กำลังโหลดแผนที่...</p>}
         </div>
     </div>
     );

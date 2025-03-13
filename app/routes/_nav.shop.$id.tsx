@@ -75,15 +75,6 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function DetailShop() {
     const { id, shop } = useLoaderData<typeof loader>();
     const fetcher = useFetcher<typeof action>();
-    const deletePopoverRef = useRef<HTMLDivElement | null>(null);
-    const restorePopoverRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        if (fetcher.state === "idle") {
-            deletePopoverRef.current?.hidePopover();
-            restorePopoverRef.current?.hidePopover();
-        }
-    }, [fetcher.state]);
 
     return (
         <div className="z-10 relative max-w-full h-[90%] flex flex-col justify-center items-center mx-auto px-10 py-6 space-y-6 animate-fade-in">
@@ -229,7 +220,7 @@ export default function DetailShop() {
                             </div>
                         )
                     }
-                    <div ref={deletePopoverRef} id="delete-popover" popover="" className='top-[75%] left-[70%] transition-all animate-fade-in'>
+                    <div id="delete-popover" popover="" className='top-[75%] left-[70%] transition-all animate-fade-in' style={{display: fetcher.data?.delete === true ? 'none' : ''}}>
                         <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] text-center">
                             <h2 className="text-xl font-semibold mb-4">คุณต้องการระงับร้านค้านี้หรือไม่?</h2>
                             <p className="text-gray-600 mb-4">หากยืนยัน ร้านค้านี้จะถูกระงับและไม่สามารถใช้งานได้</p>
@@ -266,7 +257,7 @@ export default function DetailShop() {
                     </div>
                     {
                         fetcher.data?.error && (
-                            <div className='fixed top-[75%] left-[70%] transition-all duration-300 animate-fade-in-out'>
+                            <div className='fixed top-[10%] left-[70%] transition-all duration-300 animate-fade-in-out'>
                                 <div className="bg-white text-red-500 p-6 rounded-lg shadow-lg w-[400px] text-center">
                                     <h2 className="text-xl font-semibold mb-4">เกิดข้อผิดพลาด!</h2>
                                     <p className="text-gray-600 mb-4">โปรดลองใหม่อีกครั้ง</p>

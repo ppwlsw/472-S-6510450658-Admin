@@ -97,7 +97,7 @@ export async function action({ request }: { request: Request }) {
             }
         };
 
-        return redirect(`/users/${userId}`);
+        return redirect(`/user/${userId}`);
     }
 }
 
@@ -217,6 +217,7 @@ export default function Users(){
                                     <input type="hidden" name="name" value={user.name ?? ""} />
                                     <input type="hidden" name="email" value={user.email ?? ""} />
                                     <input type="hidden" name="phone" value={user.phone ?? ""} />
+                                    <input type="hidden" name="role" value={user.role ?? ""} />
                                     <input type="hidden" name="is_verified" value={user.is_verified ?? ""} />
                                     <input type="hidden" name="image_url" value={user.image_url ?? ""} />
                                     <input type="hidden" name="created_at" value={user.created_at ?? ""} />

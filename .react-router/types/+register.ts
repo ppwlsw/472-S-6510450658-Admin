@@ -15,6 +15,9 @@ type Params = {
   "/dashboard/queue": {};
   "/dashboard/shop": {};
   "/dashboard/user": {};
+  "/user/:id": {
+    "id": string;
+  };
   "/shop/:id": {
     "id": string;
   };
