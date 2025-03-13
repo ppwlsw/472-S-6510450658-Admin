@@ -111,10 +111,19 @@ export async function action({ request }: { request: Request }) {
     }
 }
 
+interface MapClientProps {
+    position: [number, number] | null;
+    setPosition: (position: [number, number] | null) => void;
+    className?: string;
+    placeName?: string | null;
+    setPlaceName?: (placeName: string) => void;
+}
+
 export default function CreateShop() {
-    const [LeafletMap, setLeafletMap] = useState<React.ComponentType<{ position: [number, number] | null, setPosition: React.Dispatch<React.SetStateAction<[number, number] | null>> }> | null>(null);
+    const [LeafletMap, setLeafletMap] = useState<React.ComponentType<MapClientProps> | null>(null);
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [placeName, setPlaceName] = useState<string | null>(null);
 
     const fetcher = useFetcher<ActionMessage>();
 
@@ -135,7 +144,7 @@ export default function CreateShop() {
             <div className="w-full h-full flex flex-col justify-center items-center p-10 gap-4">
                 <h1 className="text-2xl font-medium">เลือกตำแหน่งบนแผนที่</h1>
 
-                {LeafletMap ? <LeafletMap position={position} setPosition={setPosition}/> : <p>กำลังโหลดแผนที่...</p>}
+                {LeafletMap ? <LeafletMap position={position} setPosition={setPosition} placeName={placeName} setPlaceName={setPlaceName}/> : <p>กำลังโหลดแผนที่...</p>}
             </div>
             <fetcher.Form method="POST" className="w-full h-full flex justify-center items-center p-10">
                 <div className="relative w-full flex flex-col gap-4 p-10 bg-white rounded-xl shadow-md">
@@ -149,7 +158,7 @@ export default function CreateShop() {
                             </label>
                             <label className="flex flex-col gap-2">
                                 <span>ที่อยู่</span>
-                                <input name="address" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
+                                <input value={placeName ?? ""} name="address" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
                             </label>
                             <label className="flex flex-col gap-2">
                                 <span>เบอร์โทรศัพท์</span>
