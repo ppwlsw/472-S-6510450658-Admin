@@ -165,7 +165,7 @@ function LoginFetcherForm() {
           name="_action"
           value="default_login"
           type="submit"
-          className="bg-nature-blue text-white-smoke border-2 text-2xl font-bold p-6 rounded-full w-full transition-all duration-300 hover:bg-white-smoke hover:text-nature-blue hover:border-2 hover:border-nature-blue hover:cursor-pointer"
+          className="bg-nature-purple text-white-smoke border-2 text-2xl font-bold p-6 rounded-full w-full transition-all duration-300 hover:bg-white-smoke hover:text-nature-purple hover:border-2 hover:border-nature-purple hover:cursor-pointer"
         >
           เข้าสู่ระบบ
         </button>
@@ -254,7 +254,7 @@ export default function Login() {
           </div>
           <div className="flex flex-col justify-center max-lg:h-3/5 w-full lg:border-l-[0.1px] border-gray-300 p-10 pt-0 pb-0 lg:gap-8">
             <p className="flex flex-row items-center text-4xl">
-              <span className="border-t-4 border-nature-blue pt-2">เข้าสู่ระบบ</span>
+              <span className="border-t-4 border-nature-purple pt-2">เข้าสู่ระบบ</span>
               <span className="border-t-4 border-white-smoke pt-2">แอดมิน</span>
               <div className="border-t-4 border-white-smoke pt-2">
                 <ShieldCheck size={36} />
