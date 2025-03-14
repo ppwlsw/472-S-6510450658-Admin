@@ -2,7 +2,7 @@ import { Store } from "lucide-react";
 import CardDashboardShop from "~/components/card-dashboard-shop";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, BarChart } from "recharts";
 import { Link, redirect, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
-import { getAuthCookie } from "~/services/cookie";
+import { getAuthCookie } from "~/utils/cookie";
 import provider, { setDefaultProvider } from "~/provider";
 import { calculateNewShopInSevenDays, calculateStatusShopInSevenDays } from "~/utils/culculator";
 
@@ -13,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     const name = url.searchParams.get("name")?.toString() ?? "";
     const status = url.searchParams.get("status")?.toString() ?? "";
 
-    const res1 = await fetch(`${process.env.BACKEND_URL}/shops`, {
+    const res1 = await fetch(`${process.env.API_BASE_URL}/shops`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     );
 
 
-    const res = await fetch(`${process.env.BACKEND_URL}/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
+    const res = await fetch(`${process.env.API_BASE_URL}/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

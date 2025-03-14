@@ -1,7 +1,7 @@
 import { Ban, CalendarMinus, CalendarPlus, CalendarSync, Check, ChevronLeft, LucideClock, Mail, Phone } from "lucide-react";
 import { Link, redirect, useFetcher, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import provider from "~/provider";
-import { getAuthCookie } from "~/services/cookie";
+import { getAuthCookie } from "~/utils/cookie";
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { id } = params;
@@ -29,7 +29,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const action: string = formData.get("_action") as string;
     if (action === "delete") {
         const id = formData.get("id") as string;
-        const res = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
+        const res = await fetch(`${process.env.API_BASE_URL}/users/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
     if (action === "restore") {
         const id = formData.get("id") as string;
-        const res = await fetch(`${process.env.BACKEND_URL}/users/${id}/restore`, {
+        const res = await fetch(`${process.env.API_BASE_URL}/users/${id}/restore`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

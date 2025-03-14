@@ -1,7 +1,7 @@
 import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Store } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { getAuthCookie } from "~/services/cookie";
+import { getAuthCookie } from "~/utils/cookie";
 
 const data = [
     { name: "Sun", count: 10 },
@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     const url = new URL(request.url);
     const page = Number(url.searchParams.get("page")) || 1;
     
-    const res1 = await fetch(`${process.env.BACKEND_URL}/users/withTrashed`, {
+    const res1 = await fetch(`${process.env.API_BASE_URL}/users/withTrashed`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     );
 
 
-    const res = await fetch(`${process.env.BACKEND_URL}/users/withTrashedPaginate?page=${page}` , {
+    const res = await fetch(`${process.env.API_BASE_URL}/users/withTrashedPaginate?page=${page}` , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

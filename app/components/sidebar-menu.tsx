@@ -1,4 +1,4 @@
-import { LayoutDashboard, PlusCircle, Store, User, Users, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, LogOut, PlusCircle, Store, User, Users, type LucideIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 
 interface SidebarItemProps {
@@ -24,7 +24,7 @@ export function SidebarItem({icon: Icon, pad, gap, text, path, currentPath, clas
         //         </div>
         //     </div>
         // </Link>
-        <Link to={path} prefetch='viewport'>
+        <Link to={path}>
             <div className={`p-2 cursor-pointer rounded-md transition-all duration-300 ${isCurrentPage ? `bg-[#3A57E8] bg-opacity-90 text-white hover:bg-opacity-100 scale-105 shadow-md` : `${btClass} hover:bg-gray-100 hover:scale-105`} ${className}`}>
                 <div className={`flex items-center px-8 p-${gap} pl-${pad} gap-4`}>
                     <Icon width={24} height={24} />
@@ -75,7 +75,7 @@ export default function SidebarMenu() {
                 </ul>
 
             <div className="absolute bottom-10 left-0 right-0 py-2 px-4 h-[50%] flex flex-col justify-end">
-                <SidebarItem icon={Users} gap={1} text="ออกจากระบบ" path="/logout" currentPath={currentPath} className="shadow-sm hover:bg-red-600 hover:text-white" btClass="bg-white text-red-600 border-[1px] border-red-600"/>
+                <SidebarItem icon={LogOut} gap={1} text="ออกจากระบบ" path="/logout" currentPath={currentPath} className="shadow-sm hover:bg-red-600 hover:text-white" btClass="bg-white text-red-600 border-[1px] border-red-600"/>
             </div>
         </nav>
     );

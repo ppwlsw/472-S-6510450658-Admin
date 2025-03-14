@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFetcher, type ActionFunctionArgs } from "react-router";
-import { getAuthCookie } from "~/services/cookie";
+import { getAuthCookie } from "~/utils/cookie";
 
 interface ActionMessage {
     message: string;
@@ -82,7 +82,7 @@ export async function action({ request }: ActionFunctionArgs) {
         }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
-    const response = await fetch(`${process.env.BACKEND_URL}/shops`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/shops`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

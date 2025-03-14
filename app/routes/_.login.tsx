@@ -1,14 +1,28 @@
 import { CircleX, Eye, EyeClosed, ShieldCheck } from "lucide-react";
 import { useState } from "react";
-import { redirect, useFetcher, type ActionFunctionArgs } from "react-router";
+import { redirect, useFetcher, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import Wave from "~/components/wave";
-import { requestDecryptToken, requestLogin } from "~/services/auth";
-import { authCookie } from "~/services/cookie";
+import { requestDecryptToken, requestLogin } from "~/utils/auth";
+import { authCookie } from "~/utils/cookie";
 import { motion } from "framer-motion";
+
+export async function loader({request}: LoaderFunctionArgs) {
+  const cookie = request.headers.get("Cookie");
+  const auth = await authCookie.parse(cookie);
+  if (auth) {
+    return redirect("/dashboard", {
+      headers: {
+        "Set-Cookie": cookie as string,
+      },
+    });
+  }
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const action: string = formData.get("_action") as string;
+
+  
 
   if (action === "reset") {
     return null;

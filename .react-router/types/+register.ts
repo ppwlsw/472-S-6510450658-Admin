@@ -8,6 +8,7 @@ declare module "react-router" {
 
 type Params = {
   "/": {};
+  "/logout": {};
   "/login": {};
   "/hello": {};
   "/createshop": {};

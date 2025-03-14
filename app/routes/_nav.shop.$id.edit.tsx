@@ -2,7 +2,7 @@ import { Link, redirect, useFetcher, useLoaderData, type ActionFunctionArgs, typ
 import { useEffect, useState } from "react";
 
 import Provider, { setDefaultStatus } from "~/provider";
-import { getAuthCookie } from "~/services/cookie";
+import { getAuthCookie } from "~/utils/cookie";
 
 interface MapClientProps {
     position: [number, number] | null;
@@ -41,7 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const status = Provider.Status[id];
 
     if (id !== "" || latitude !== "" || longitude !== "") {
-        const res = await fetch(`${process.env.BACKEND_URL}/shops/${id}/location`, {
+        const res = await fetch(`${process.env.API_BASE_URL}/shops/${id}/location`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

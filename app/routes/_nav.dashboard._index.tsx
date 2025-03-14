@@ -3,12 +3,12 @@ import { Link, redirect, useLoaderData, type ActionFunctionArgs, type LoaderFunc
 import CardDashboardShop from "~/components/card-dashboard-shop";
 import CardDashboardUser from "~/components/card-dashboard-user";
 import provider, { setDefaultProvider } from "~/provider";
-import { getAuthCookie } from "~/services/cookie";
+import { getAuthCookie } from "~/utils/cookie";
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const auth = await getAuthCookie({ request: request });
 
-    const res = await fetch(`${process.env.BACKEND_URL}/shops`, {
+    const res = await fetch(`${process.env.API_BASE_URL}/shops`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -17,7 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
     );
 
-    const resCustomer = await fetch(`${process.env.BACKEND_URL}/users/withTrashed`, {
+    const resCustomer = await fetch(`${process.env.API_BASE_URL}/users/withTrashed`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

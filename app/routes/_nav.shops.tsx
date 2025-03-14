@@ -2,7 +2,7 @@ import { type LoaderFunctionArgs } from "react-router";
 import { Link, redirect, useFetcher, useLoaderData } from "react-router";
 import { Store, ChevronRight, PlusCircle } from "lucide-react";
 import Provider, { setDefaultProvider } from "~/provider";
-import { getAuthCookie } from "~/services/cookie";
+import { getAuthCookie } from "~/utils/cookie";
 
 export async function loader({ request }: LoaderFunctionArgs){
     const auth = await getAuthCookie({request: request});
@@ -11,7 +11,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     const name = url.searchParams.get("name")?.toString() ?? "";
     const status = url.searchParams.get("status")?.toString() ?? "";
     
-    const res1 = await fetch(`${process.env.BACKEND_URL}/shops/withTrashed`, {
+    const res1 = await fetch(`${process.env.API_BASE_URL}/shops/withTrashed`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     );
 
 
-    const res = await fetch(`${process.env.BACKEND_URL}/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
+    const res = await fetch(`${process.env.API_BASE_URL}/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

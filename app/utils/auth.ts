@@ -1,4 +1,4 @@
-const BACKEND_URL: string = process.env.BACKEND_URL as string;
+const API_BASE_URL: string = process.env.API_BASE_URL as string;
 
 
 interface ResponseMessageProps {
@@ -21,7 +21,7 @@ export async function requestLogin(
   formData.set("email", loginProps.email);
   formData.set("password", loginProps.password);
 
-  const response = await fetch(`${BACKEND_URL}/auth/login`, {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     body: formData,
   });
@@ -46,7 +46,7 @@ export async function requestDecryptToken(
 ): Promise<ResponseMessageProps> {
   const formData = new FormData();
   formData.set("encrypted", token);
-  const response = await fetch(`${BACKEND_URL}/auth/decrypt`, {
+  const response = await fetch(`${API_BASE_URL}/auth/decrypt`, {
     method: "POST",
     body: formData,
   });
@@ -56,4 +56,19 @@ export async function requestDecryptToken(
     status: response.status,
     error: response.status === 500 ? "เกิดข้อผิดพลาด" : "",
   };
+}
+
+export async function logout(token: string):  Promise<ResponseMessageProps>{
+  const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    method: "POST",
+  });
+  return {
+    data: {},
+    status: response.status,
+    error: response.status != 204 ? "เกิดข้อผิดพลาด" : ""
+  }
 }

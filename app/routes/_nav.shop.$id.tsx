@@ -4,7 +4,7 @@ import { MapPin, Phone, Mail, Clock, Info, Calendar, CheckCircle, ChevronLeft } 
 
 import Provider, { setDefaultStatus } from "~/provider";
 import { useEffect, useRef } from 'react';
-import { getAuthCookie } from '~/services/cookie';
+import { getAuthCookie } from '~/utils/cookie';
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { id } = params;
@@ -39,7 +39,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     if (action == "delete") {
-        const res = await fetch(`${process.env.BACKEND_URL}/shops/${id}`, {
+        const res = await fetch(`${process.env.API_BASE_URL}/shops/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export async function action({ request }: ActionFunctionArgs) {
         }
     }
     if (action == "restore") {
-        const res = await fetch(`${process.env.BACKEND_URL}/shops/${id}/restore`, {
+        const res = await fetch(`${process.env.API_BASE_URL}/shops/${id}/restore`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

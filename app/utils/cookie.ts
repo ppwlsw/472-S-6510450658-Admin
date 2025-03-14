@@ -1,7 +1,7 @@
 import { createCookie, redirect, type Cookie, type LoaderFunctionArgs } from "react-router";
 
 const ENV: string = process.env.ENV as string;
-const BACKEND_URL: string = process.env.BACKEND_URL as string;
+const API_BASE_URL: string = process.env.API_BASE_URL as string;
 
 export const authCookie: Cookie = createCookie("auth", {
   path: "/",
@@ -10,7 +10,7 @@ export const authCookie: Cookie = createCookie("auth", {
 
   httpOnly: ENV !== "PRODUCTION",
   secure: ENV === "PRODUCTION",
-  secrets: [BACKEND_URL]
+  secrets: [API_BASE_URL]
 });
 
 export interface AuthCookieProps {

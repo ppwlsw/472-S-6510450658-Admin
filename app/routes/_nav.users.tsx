@@ -2,14 +2,14 @@ import { type LoaderFunctionArgs } from "react-router";
 import { Link, redirect, useFetcher, useLoaderData } from "react-router";
 import { Store, ChevronRight, PlusCircle, User2 } from "lucide-react";
 import Provider, { setDefaultProvider } from "~/provider";
-import { getAuthCookie } from "~/services/cookie";
+import { getAuthCookie } from "~/utils/cookie";
 
 export async function loader({ request }: LoaderFunctionArgs){
     const auth = await getAuthCookie({request: request});
     const url = new URL(request.url);
     const page = Number(url.searchParams.get("page")) || 1;
     
-    const res1 = await fetch(`${process.env.BACKEND_URL}/users/withTrashed`, {
+    const res1 = await fetch(`${process.env.API_BASE_URL}/users/withTrashed`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     );
 
 
-    const res = await fetch(`${process.env.BACKEND_URL}/users/withTrashedPaginate?page=${page}` , {
+    const res = await fetch(`${process.env.API_BASE_URL}/users/withTrashedPaginate?page=${page}` , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
