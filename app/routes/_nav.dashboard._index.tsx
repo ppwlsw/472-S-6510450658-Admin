@@ -1,11 +1,13 @@
 import { Store, User } from "lucide-react";
-import { Link, redirect, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { Link, redirect, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import CardDashboardShop from "~/components/card-dashboard-shop";
+import CardDashboardUser from "~/components/card-dashboard-user";
+import provider, { setDefaultProvider } from "~/provider";
 import { getAuthCookie } from "~/services/cookie";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-    const auth = await getAuthCookie({request: request});
-    
+    const auth = await getAuthCookie({ request: request });
+
     const res = await fetch(`${process.env.BACKEND_URL}/shops`, {
         method: "GET",
         headers: {
@@ -15,7 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
     );
 
-    const resCustomer = await fetch(`${process.env.BACKEND_URL}/users`, {
+    const resCustomer = await fetch(`${process.env.BACKEND_URL}/users/withTrashed`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -38,6 +40,97 @@ export async function loader({ request }: LoaderFunctionArgs) {
         totalCustomers: totalCustomers,
         totalShops: totalShops
     };
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const action = formData.get("_action") as string;
+
+    if (action == "show_shop") {
+
+        const shopId = formData.get("shopId") as string;
+        const name = formData.get("name") as string;
+        const email = formData.get("email") as string;
+        const address = formData.get("address") as string;
+        const phone = formData.get("phone") as string;
+        const is_verified = formData.get("is_verified");
+        const image_url = formData.get("image_url") as string;
+        const is_open = formData.get("is_open") ? true : false;
+        const latitude = Number(formData.get("latitude")) as number;
+        const longitude = Number(formData.get("longitude")) as number;
+        const description = formData.get("description") as string;
+        const created_at = formData.get("created_at");
+        const updated_at = formData.get("updated_at");
+        const deleted_at = formData.get("deleted_at");
+
+        if (!shopId) { return redirect('/dashboard') };
+
+        const shopProvider = provider.Provider[shopId];
+
+        if (!shopProvider) {
+            setDefaultProvider(Number(shopId));
+        }
+
+        provider.Provider[shopId] = {
+            shopfilter: {
+                id: shopId,
+                name: name,
+                email: email,
+                address: address,
+                phone: phone,
+                is_verified: is_verified === "true",
+                image_url: image_url,
+                is_open: is_open,
+                latitude: latitude,
+                description: description,
+                longitude: longitude,
+                created_at: created_at?.toString() ?? "",
+                updated_at: updated_at?.toString() ?? "",
+                deleted_at: deleted_at?.toString() ?? ""
+            }
+        };
+
+        return redirect(`/shop/${shopId}`);
+    }
+
+    if (action == "show_user") {
+        const userId = formData.get("userId");
+
+        const name = formData.get("name") as string;
+        const email = formData.get("email") as string;
+        const role = formData.get("role") as string;
+        const phone = formData.get("phone") as string;
+        const is_verified = formData.get("is_verified");
+        const image_url = formData.get("image_url") as string;
+        const created_at = formData.get("created_at") as string;
+        const updated_at = formData.get("updated_at") as string;
+        const deleted_at = formData.get("deleted_at") as string;
+
+        const userIdStr = userId?.toString();
+        if (!userIdStr) return redirect("/users");
+
+        const shop = provider.Provider[userIdStr];
+        if (!shop) {
+            setDefaultProvider(Number(userId));
+        }
+
+        provider.UserProvider[userIdStr] = {
+            userfilter: {
+                id: userIdStr,
+                name: name,
+                email: email,
+                phone: phone,
+                role: role,
+                image_url: image_url,
+                is_verified: is_verified === "true",
+                created_at: created_at?.toString() ?? "",
+                updated_at: updated_at?.toString() ?? "",
+                deleted_at: deleted_at?.toString() ?? ""
+            }
+        };
+
+        return redirect(`/user/${userId}`);
+    }
 }
 
 export default function DashBoardAll() {
@@ -67,55 +160,41 @@ export default function DashBoardAll() {
             </div>
             <div className="flex flex-col gap-4 px-10 pt-10 animate-fade-in lg:flex-row">
                 <div className="w-full flex flex-col lg:flex-row gap-4">
-                    {/* <div className="w-full flex flex-row gap-4">
-                        <div className="w-full">
-                            <h1 className="text-2xl">
-                                ร้านค้าทั้งหมด
-                            </h1>
-                        </div>
-                        <div className="w-full">
-                            <h1 className="text-2xl">
-                                ลูกค้าทั้งหมด
-                            </h1>
-                        </div>
-                    </div> */}
                     <div className="w-full flex flex-col gap-4 lg:flex-row">
                         <div className="w-full flex flex-col gap-6">
-                            <div className="w-full">
-                                <h1 className="text-2xl">
-                                    ร้านค้าทั้งหมด
+                            <div className="w-full flex flex-row justify-between items-center px-2">
+                                <h1 className="text-xl font-bold">
+                                    ร้านค้า
                                 </h1>
+                                <Link to="/shops" className="underline">ดูทั้งหมด</Link>
                             </div>
-                            <div className="h-fit w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
-                                <div className="">
-                                    {
-                                        shops.slice(0, 9).map((shop: any) => (
-                                            <div key={shop.id}>
-                                                <CardDashboardShop shop={shop} />
-                                                <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
+                            <div className="h-[500px] w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 overflow-y-scroll animate-fade-in">
+                                {
+                                    shops.map((shop: any) =>
+                                        <div key={shop.id} className="w-full">
+                                            <CardDashboardShop shop={shop} />
+                                            <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                        </div>
+                                    )
+                                }
                             </div>
                         </div>
                         <div className="w-full flex flex-col gap-6">
-                            <div className="w-full">
-                                <h1 className="text-2xl">
-                                    ลูกค้าทั้งหมด
+                            <div className="w-full flex flex-row justify-between items-center px-2">
+                                <h1 className="text-xl font-bold">
+                                    ลูกค้า
                                 </h1>
+                                <Link to="/users" className="underline">ดูทั้งหมด</Link>
                             </div>
-                            <div className="h-fit w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
-                                <div className="">
-                                    {
-                                        shops.slice(0, 9).map((shop: any) => (
-                                            <div key={shop.id}>
-                                                <CardDashboardShop shop={shop} />
-                                                <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
+                            <div className="h-[500px] w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 overflow-y-scroll animate-fade-in">
+                                {
+                                    customers.map((user: any) =>
+                                        <div key={user.id} className="w-full">
+                                            <CardDashboardUser user={user} />
+                                            <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                        </div>
+                                    )
+                                }
                             </div>
                         </div>
                     </div>

@@ -101,7 +101,7 @@ export default function User() {
                     </div>
                 </div>
                 <div className="relative w-fit h-fit animate-image-slide">
-                    <img src={'https://static.vecteezy.com/system/resources/previews/001/840/618/large_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-free-vector.jpg'} className="object-cover h-20 w-20 sm:h-40 sm:w-40 lg:h-60 lg:w-60 xl:h-80 xl:w-80 rounded-full shadow-2xl bg-white hover:scale-105 transition-all duration-300" />
+                    <img src={`${user.userfilter.image_url == "" ? 'https://static.vecteezy.com/system/resources/previews/001/840/618/large_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-free-vector.jpg' : user.userfilter.image_url}`} className="object-cover h-20 w-20 sm:h-40 sm:w-40 lg:h-60 lg:w-60 xl:h-80 xl:w-80 rounded-full shadow-2xl bg-white hover:scale-105 transition-all duration-300" />
                     <div className={`absolute bottom-0 right-0 sm:bottom-1 sm:right-0.5 md:bottom-2 md:right-1 lg:bottom-4 lg:right-2 xl:bottom-6 xl:right-4 p-0 sm:p-1 md:p-2 lg:p-4 ${checkStatus().status == 0 ? "bg-red-500" : checkStatus().status == 1 ? "bg-green-500" : "bg-amber-500"} rounded-full shadow-md`}>
                         {
                             checkStatus().status == 0 ?

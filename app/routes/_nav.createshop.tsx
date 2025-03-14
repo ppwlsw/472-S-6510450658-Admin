@@ -1,16 +1,17 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
-import { redirect, useFetcher } from "react-router";
+import { useFetcher, type ActionFunctionArgs } from "react-router";
 import { getAuthCookie } from "~/services/cookie";
 
 interface ActionMessage {
     message: string;
     error: string;
     status: number;
-  }
+    success?: boolean;
+}
 
-export async function action({ request }: { request: Request }) {
-    const auth = await getAuthCookie({request: request});
+export async function action({ request }: ActionFunctionArgs) {
+    const auth = await getAuthCookie({ request: request });
     const formData = await request.formData();
 
     const positionRaw = formData.get("position") as string;
@@ -30,7 +31,7 @@ export async function action({ request }: { request: Request }) {
         }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
-    if (formData.get("name") === "" || formData.get("address") === "" || formData.get("phone") === ""  || formData.get("email") === ""  || formData.get("password") === "" ) {
+    if (formData.get("name") === "" || formData.get("address") === "" || formData.get("phone") === "" || formData.get("email") === "" || formData.get("password") === "") {
         const message: ActionMessage = {
             message: "กรุณากรอกข้อมูลให้ครบถ้วน",
             error: "กรุณากรอกข้อมูลให้ครบถ้วน",
@@ -39,14 +40,14 @@ export async function action({ request }: { request: Request }) {
         return message;
     }
 
-    
+
     const name = formData.get("name") as string;
     const address = formData.get("address") as string;
     const phone = formData.get("phone") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    
+
     if (phone.length != 10) {
         return new Response(JSON.stringify({
             message: "เบอร์โทรศัพท์ต้องมีความยาว 10 ตัว",
@@ -81,7 +82,7 @@ export async function action({ request }: { request: Request }) {
         }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
-    const response = await fetch(`${auth.token}/shops`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/shops`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -97,7 +98,7 @@ export async function action({ request }: { request: Request }) {
             'longitude': positionArray[1],
         }),
     });
-    
+
     if (!(response.status === 201)) {
         const message: ActionMessage = {
             message: "มีอีเมลนี้อยุ่ในระบบแล้ว",
@@ -107,7 +108,13 @@ export async function action({ request }: { request: Request }) {
         return message;
     }
     else {
-        return redirect("/shops");
+        const message: ActionMessage = {
+            message: "สร้างบัญชีร้านค้าสำเร็จ",
+            error: "",
+            status: 200,
+            success: true,
+        }
+        return message;
     }
 }
 
@@ -125,26 +132,26 @@ export default function CreateShop() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [placeName, setPlaceName] = useState<string | null>(null);
 
-    const fetcher = useFetcher<ActionMessage>();
+    const fetcher = useFetcher<typeof action>();
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-          import("~/components/map")
-            .then((mod) => setLeafletMap(() => mod.default))
-            .catch((err) => console.error("Leaflet failed to load", err));
+            import("~/components/map")
+                .then((mod) => setLeafletMap(() => mod.default))
+                .catch((err) => console.error("Leaflet failed to load", err));
         }
-      }, []);
+    }, []);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
     return (
-        <div className="h-[93%] grid grid-cols-[1fr_1fr] items-center justify-center gap-6">
+        <div className="relative h-[93%] flex flex-col xl:flex-row items-center justify-center gap-6">
             <div className="w-full h-full flex flex-col justify-center items-center p-10 gap-4">
                 <h1 className="text-2xl font-medium">เลือกตำแหน่งบนแผนที่</h1>
 
-                {LeafletMap ? <LeafletMap position={position} setPosition={setPosition} placeName={placeName} setPlaceName={setPlaceName}/> : <p>กำลังโหลดแผนที่...</p>}
+                {LeafletMap ? <LeafletMap position={position} setPosition={setPosition} placeName={placeName} setPlaceName={setPlaceName} /> : <p>กำลังโหลดแผนที่...</p>}
             </div>
             <fetcher.Form method="POST" className="w-full h-full flex justify-center items-center p-10">
                 <div className="relative w-full flex flex-col gap-4 p-10 bg-white rounded-xl shadow-md">
@@ -171,13 +178,13 @@ export default function CreateShop() {
                             <label className="flex flex-col gap-2">
                                 <span>รหัสผ่าน</span>
                                 <div className="flex items-center gap-2 relative">
-                                    <input 
-                                        name="password" 
+                                    <input
+                                        name="password"
                                         type={showPassword ? "text" : "password"}
-                                        className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md w-full pr-10" 
+                                        className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md w-full pr-10"
                                     />
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         onClick={togglePasswordVisibility}
                                         className="absolute right-2.5 top-2.5"
                                     >
@@ -185,7 +192,7 @@ export default function CreateShop() {
                                     </button>
                                 </div>
                             </label>
-                            {fetcher.data?.error && <h1 className="text-red-500">{fetcher.data.error}</h1>}
+                            {fetcher.data?.error && <h1 className="text-red-500">{fetcher.data?.error}</h1>}
                         </div>
                         <button
                             className="p-2 bg-[#3A57E8] bg-opacity-95 text-white rounded-md transform duration-300 transition-all hover:bg-opacity-100"
@@ -197,6 +204,24 @@ export default function CreateShop() {
                     </div>
                 </div>
             </fetcher.Form>
+            {
+                fetcher.data?.error && (
+                    <div className='fixed top-[10%] left-[70%] transition-all animate-fade-in-out'>
+                        <div className="bg-white text-red-500 p-6 rounded-lg shadow-lg w-[400px] text-center">
+                            <h2 className="text-xl font-semibold mb-4">ทำการสร้างบัญชีร้านค้าไม่สำเร็จ</h2>
+                        </div>
+                    </div>
+                )
+            }
+            {
+                fetcher.data?.success && (
+                    <div className='fixed top-[10%] left-[70%] transition-all animate-fade-in-out'>
+                        <div className="bg-white text-green-500 p-6 rounded-lg shadow-lg w-[400px] text-center">
+                            <h2 className="text-xl font-semibold mb-4">ทำการสร้างบัญชีร้านค้าสำเร็จ</h2>
+                        </div>
+                    </div>
+                )
+            }
         </div>
     )
 }

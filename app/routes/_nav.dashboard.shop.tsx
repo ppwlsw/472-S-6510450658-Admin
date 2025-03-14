@@ -1,64 +1,10 @@
 import { Store } from "lucide-react";
 import CardDashboardShop from "~/components/card-dashboard-shop";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, BarChart } from "recharts";
-import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { Link, redirect, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { getAuthCookie } from "~/services/cookie";
-
-const data = [
-    { name: "Sun", count: 10 },
-    { name: "Mon", count: 2 },
-    { name: "Tue", count: 13 },
-    { name: "Wed", count: 5 },
-    { name: "Thu", count: 2 },
-    { name: "Fri", count: 16 },
-    { name: "Sat", count: 23 },
-];
-
-const queueLogData = [
-    { 
-        name: "อา",
-        confirm: 10,
-        ban: 2,
-        pending: 3
-    },
-    {
-        name: "จ",
-        confirm: 2,
-        ban: 3,
-        pending: 1
-    },
-    {
-        name: "อ",
-        confirm: 13,
-        ban: 2,
-        pending: 4
-    },
-    {
-        name: "พ",
-        confirm: 5,
-        ban: 3,
-        pending: 2
-    },
-    {
-        name: "พฤ",
-        confirm: 2,
-        ban: 1,
-        pending: 1
-    },
-    {
-        name: "ศ",
-        confirm: 16,
-        ban: 3,
-        pending: 5
-    },
-    {
-        name: "ส",
-        confirm: 23,
-        ban: 4,
-        pending: 6
-    },
-];
-
+import provider, { setDefaultProvider } from "~/provider";
+import { calculateNewShopInSevenDays, calculateStatusShopInSevenDays } from "~/utils/culculator";
 
 export async function loader({ request }: LoaderFunctionArgs){
     const auth = await getAuthCookie({request: request});
@@ -102,16 +48,73 @@ export async function loader({ request }: LoaderFunctionArgs){
         totalPending: totalPending
     }
 
+    const ShopGraphData = calculateNewShopInSevenDays(data);
+    const ShopBarGraphData = calculateStatusShopInSevenDays(data);
+
     return {
-        shops: jsonAlldata.data,
+        shops: data,
+        ShopGraphData: ShopGraphData,
+        ShopBarGraphData: ShopBarGraphData,
         name: name,
         status: status,
         stats: stats
     };
 }
 
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const action = formData.get("_action") as string;
+
+    if (action == "show_shop") {
+
+        const shopId = formData.get("shopId") as string;
+        const name = formData.get("name") as string;
+        const email = formData.get("email") as string;
+        const address = formData.get("address") as string;
+        const phone = formData.get("phone") as string;
+        const is_verified = formData.get("is_verified");
+        const image_url = formData.get("image_url") as string;
+        const is_open = formData.get("is_open") ? true : false;
+        const latitude = Number(formData.get("latitude")) as number;
+        const longitude = Number(formData.get("longitude")) as number;
+        const description = formData.get("description") as string;
+        const created_at = formData.get("created_at");
+        const updated_at = formData.get("updated_at");
+        const deleted_at = formData.get("deleted_at");
+
+        if (!shopId) { return redirect('/dashboard') };
+
+        const shopProvider = provider.Provider[shopId];
+
+        if (!shopProvider) {
+            setDefaultProvider(Number(shopId));
+        }
+
+        provider.Provider[shopId] = {
+            shopfilter: {
+                id: shopId,
+                name: name,
+                email: email,
+                address: address,
+                phone: phone,
+                is_verified: is_verified === "true",
+                image_url: image_url,
+                is_open: is_open,
+                latitude: latitude,
+                description: description,
+                longitude: longitude,
+                created_at: created_at?.toString() ?? "",
+                updated_at: updated_at?.toString() ?? "",
+                deleted_at: deleted_at?.toString() ?? ""
+            }
+        };
+
+        return redirect(`/shop/${shopId}`);
+    }
+}
+
 export default function DashBoardShop () {
-    const { shops, name, status, stats } = useLoaderData<typeof loader>();
+    const { shops, ShopGraphData, ShopBarGraphData, name, status, stats } = useLoaderData<typeof loader>();
 
 
     return (
@@ -159,12 +162,12 @@ export default function DashBoardShop () {
                     </div>
                 </div>
             </div>
-            <div className="w-full flex flex-row justify-between p-10 gap-4">
-                <div className="w-7/12 h-fit bg-white p-10 rounded-xl shadow-md animate-fade-in flex flex-col gap-6">
+            <div className="w-full flex flex-col lg:flex-row justify-between p-10 gap-4">
+                <div className="w-full lg:w-7/12 h-fit bg-white p-10 rounded-xl shadow-md animate-fade-in flex flex-col gap-6">
                     <div className="">
                         <h1 className="text-xl font-bold mb-4">แนวโน้มจำนวนร้านค้าใหม่</h1>
                         <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={data}>
+                            <LineChart data={ShopGraphData}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis />
@@ -180,7 +183,7 @@ export default function DashBoardShop () {
                         </div>
                         <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={queueLogData}>
+                                <BarChart data={ShopBarGraphData}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
                                     <YAxis />
@@ -194,7 +197,7 @@ export default function DashBoardShop () {
                         </div>
                     </div>
                 </div>
-                <div className="h-fit w-5/12 bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
+                <div className="h-fit w-full lg:w-5/12 bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 animate-fade-in">
                     <div className="w-full flex flex-row justify-between items-center">
                         <h1 className="text-xl font-bold">
                             ร้านค้า

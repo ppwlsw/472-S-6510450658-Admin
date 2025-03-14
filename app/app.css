@@ -81,7 +81,7 @@
   --color-white-smoke: #F5F5F5;
   --color-obsidian: #0B1215;
   --animate-fade-in: fade-in 0.75s ease-in;
-  --animate-fade-in-out: fade-in-out 4s ease-in-out forwards;
+  --animate-fade-in-out: fade-in-out 3s ease-in-out forwards;
   --animate-down: down 0.75s ease-in-out;
   --animate-up: up 0.75s ease-in-out;
   --animate-fade-in-delay: fade-in-delay 0.5s ease-in;
