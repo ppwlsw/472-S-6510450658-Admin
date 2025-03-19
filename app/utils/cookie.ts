@@ -3,7 +3,7 @@ import { createCookie, redirect, type Cookie, type LoaderFunctionArgs } from "re
 const ENV: string = process.env.ENV as string;
 const API_BASE_URL: string = process.env.API_BASE_URL as string;
 
-export const authCookie: Cookie = createCookie("auth", {
+export const authCookie: Cookie = createCookie("auth_admin", {
   path: "/",
   sameSite: "lax",
   maxAge: 60 * 60 * 24,

@@ -6,17 +6,17 @@ import { requestDecryptToken, requestLogin } from "~/utils/auth";
 import { authCookie } from "~/utils/cookie";
 import { motion } from "framer-motion";
 
-export async function loader({request}: LoaderFunctionArgs) {
-  const cookie = request.headers.get("Cookie");
-  const auth = await authCookie.parse(cookie);
-  if (auth) {
-    return redirect("/dashboard", {
-      headers: {
-        "Set-Cookie": cookie as string,
-      },
-    });
-  }
-}
+// export async function loader({request}: LoaderFunctionArgs) {
+//   const cookie = request.headers.get("Cookie");
+//   const auth = await authCookie.parse(cookie);
+//   if (auth) {
+//     return redirect("/dashboard", {
+//       headers: {
+//         "Set-Cookie": cookie as string,
+//       },
+//     });
+//   }
+// }
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
