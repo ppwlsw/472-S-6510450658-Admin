@@ -1,7 +1,7 @@
 import { Ban, CalendarMinus, CalendarPlus, CalendarSync, Check, ChevronLeft, LucideClock, Mail, Phone } from "lucide-react";
 import { Link, redirect, useFetcher, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import provider from "~/provider";
-import { getAuthCookie } from "~/utils/cookie";
+import { useAuth } from "~/utils/auth";
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { id } = params;
@@ -24,7 +24,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const auth = await getAuthCookie({request: request});
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
     const formData = await request.formData();
     const action: string = formData.get("_action") as string;
     if (action === "delete") {

@@ -3,10 +3,11 @@ import { Link, redirect, useLoaderData, type ActionFunctionArgs, type LoaderFunc
 import CardDashboardShop from "~/components/card-dashboard-shop";
 import CardDashboardUser from "~/components/card-dashboard-user";
 import provider, { setDefaultProvider } from "~/provider";
-import { getAuthCookie } from "~/utils/cookie";
+import { useAuth } from "~/utils/auth";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-    const auth = await getAuthCookie({ request: request });
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
 
     const res = await fetch(`${process.env.API_BASE_URL}/shops`, {
         method: "GET",

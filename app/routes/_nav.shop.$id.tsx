@@ -4,7 +4,7 @@ import { MapPin, Phone, Mail, Clock, Info, Calendar, CheckCircle, ChevronLeft } 
 
 import Provider, { setDefaultStatus } from "~/provider";
 import { useEffect, useRef } from 'react';
-import { getAuthCookie } from '~/utils/cookie';
+import { useAuth } from '~/utils/auth';
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { id } = params;
@@ -27,7 +27,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const auth = await getAuthCookie({request: request});
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
     const formData = await request.formData();
     const action = formData.get("_action") as string;
     const id = formData.get("id") as string;

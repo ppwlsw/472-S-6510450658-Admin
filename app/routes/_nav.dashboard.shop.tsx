@@ -2,12 +2,13 @@ import { Store } from "lucide-react";
 import CardDashboardShop from "~/components/card-dashboard-shop";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, BarChart } from "recharts";
 import { Link, redirect, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
-import { getAuthCookie } from "~/utils/cookie";
 import provider, { setDefaultProvider } from "~/provider";
 import { calculateNewShopInSevenDays, calculateStatusShopInSevenDays } from "~/utils/culculator";
+import { useAuth } from "~/utils/auth";
 
 export async function loader({ request }: LoaderFunctionArgs){
-    const auth = await getAuthCookie({request: request});
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
     const url = new URL(request.url);
     const page = Number(url.searchParams.get("page")) || 1;
     const name = url.searchParams.get("name")?.toString() ?? "";

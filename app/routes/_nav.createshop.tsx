@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFetcher, type ActionFunctionArgs } from "react-router";
-import { getAuthCookie } from "~/utils/cookie";
+import { useAuth } from "~/utils/auth";
 
 interface ActionMessage {
     message: string;
@@ -11,7 +11,8 @@ interface ActionMessage {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const auth = await getAuthCookie({ request: request });
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
     const formData = await request.formData();
 
     const positionRaw = formData.get("position") as string;

@@ -1,7 +1,7 @@
 import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Store } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { getAuthCookie } from "~/utils/cookie";
+import { useAuth } from "~/utils/auth";
 
 const data = [
     { name: "Sun", count: 10 },
@@ -14,7 +14,8 @@ const data = [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs){
-    const auth = await getAuthCookie({request: request});
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
     const url = new URL(request.url);
     const page = Number(url.searchParams.get("page")) || 1;
     

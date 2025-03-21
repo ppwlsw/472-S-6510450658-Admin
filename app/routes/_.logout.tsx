@@ -1,10 +1,10 @@
 import { redirect, type LoaderFunctionArgs } from "react-router";
-import { logout } from "~/utils/auth";
-import { authCookie, getAuthCookie } from "~/utils/cookie";
+import { authCookie, useAuth } from "~/utils/auth";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const cookie = await getAuthCookie({ request });
-  const response = await logout(cookie.token);
+  const { getCookie, logout } = useAuth;
+  const cookie = await getCookie({ request });
+  logout(cookie.token);
 
   return redirect("/login", {
     headers: {

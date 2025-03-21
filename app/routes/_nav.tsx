@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router";
+import { Outlet, useLocation, type LoaderFunctionArgs } from "react-router";
 import SidebarMenu, { SidebarItem } from "~/components/sidebar-menu";
 import {
   LayoutDashboard,
@@ -7,6 +7,12 @@ import {
   Store,
   Users,
 } from "lucide-react";
+import { useAuth } from "~/utils/auth";
+
+export async function loader( { request }: LoaderFunctionArgs) {
+  const  { validate } = useAuth;
+  await validate({ request });
+}
 
 export default function Nav() {
   const currentPath = useLocation().pathname;

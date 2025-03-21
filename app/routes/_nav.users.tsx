@@ -2,10 +2,11 @@ import { type LoaderFunctionArgs } from "react-router";
 import { Link, redirect, useFetcher, useLoaderData } from "react-router";
 import { Store, ChevronRight, PlusCircle, User2 } from "lucide-react";
 import Provider, { setDefaultProvider } from "~/provider";
-import { getAuthCookie } from "~/utils/cookie";
+import { useAuth } from "~/utils/auth";
 
 export async function loader({ request }: LoaderFunctionArgs){
-    const auth = await getAuthCookie({request: request});
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
     const url = new URL(request.url);
     const page = Number(url.searchParams.get("page")) || 1;
     

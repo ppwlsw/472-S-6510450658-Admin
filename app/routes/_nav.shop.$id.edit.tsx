@@ -2,7 +2,7 @@ import { Link, redirect, useFetcher, useLoaderData, type ActionFunctionArgs, typ
 import { useEffect, useState } from "react";
 
 import Provider, { setDefaultStatus } from "~/provider";
-import { getAuthCookie } from "~/utils/cookie";
+import { useAuth } from "~/utils/auth";
 
 interface MapClientProps {
     position: [number, number] | null;
@@ -31,7 +31,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const auth = await getAuthCookie({request: request});
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
     const formData = await request.formData();
     const id = formData.get("id") as string;
     const address = formData.get("address");

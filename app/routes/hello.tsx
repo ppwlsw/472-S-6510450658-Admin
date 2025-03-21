@@ -1,8 +1,9 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
-import { getAuthCookie } from "~/utils/cookie";
+import { useAuth } from "~/utils/auth";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-    const auth = await getAuthCookie({ request: request });
+    const { getCookie } = useAuth
+    const auth = await getCookie({ request: request });
     return {auth: auth};
 }
 
