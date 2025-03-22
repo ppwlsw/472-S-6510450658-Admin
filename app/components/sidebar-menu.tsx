@@ -16,14 +16,6 @@ export function SidebarItem({icon: Icon, pad, gap, text, path, currentPath, clas
     const isCurrentPage = currentPath.startsWith(path);
 
     return (
-        // <Link to={path.endsWith("dashboard") ? "/dashboard/shop" : path} prefetch='viewport'>
-        //     <div className={`p-2 cursor-pointer rounded-md transition-all duration-300 ${isCurrentPage ? "bg-[#3A57E8] bg-opacity-90 text-white hover:bg-opacity-100 scale-105 shadow-md" : path === "/dashboard" ? "bg-[rgb(0,0,0,0.05)] text-[#8A92A6] hover:bg-gray-100 hover:scale-105" :"bg-white text-[#8A92A6] hover:bg-gray-100 hover:scale-105"} ${className}`}>
-        //         <div className={`flex items-center p-${gap} pl-${pad} gap-4`}>
-        //             <Icon width={24} height={24} />
-        //             <h1>{text}</h1>
-        //         </div>
-        //     </div>
-        // </Link>
         <Link to={path}>
             <div className={`p-2 cursor-pointer rounded-md transition-all duration-300 ${isCurrentPage ? `bg-[#3A57E8] bg-opacity-90 text-white hover:bg-opacity-100 scale-105 shadow-md` : `${btClass} hover:bg-gray-100 hover:scale-105`} ${className}`}>
                 <div className={`flex items-center px-8 p-${gap} pl-${pad} gap-4`}>

@@ -71,11 +71,15 @@ export default function Map() {
                         <></>
                     )
                 }
-                <Link to={`/shop/${id}/edit`}>
-                    <div className="px-3 py-2 bg-[#3A57E8] text-white rounded-lg bg-opacity-95 transition-all duration-300 hover:bg-opacity-100">
-                        <h1>แก้ไข</h1>
-                    </div>
-                </Link>
+                {
+                    shop.shopfilter.is_verified && !shop.shopfilter.deleted_at && (
+                        <Link to={`/shop/${id}/edit`}>
+                            <div className="px-3 py-2 bg-[#3A57E8] text-white rounded-lg bg-opacity-95 transition-all duration-300 hover:bg-opacity-100">
+                                <h1>แก้ไข</h1>
+                            </div>
+                        </Link>
+                    )
+                }
             </div>
         </div>
         <div>
