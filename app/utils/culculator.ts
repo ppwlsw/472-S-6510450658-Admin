@@ -111,4 +111,41 @@ function calculateStatusShopInSevenDays(shops: Shop[]): ShopBarGraphProps[] {
 
 }
 
-export { calculateNewShopInSevenDays, calculateStatusShopInSevenDays };
+function calculateNewCustomerInSevenDays(customers: Customer[]): ShopGraphProps[] {
+  const newCustomers = [...customers];
+  const today = new Date();
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(today.getDate() - 6);
+
+  const newCustomer = newCustomers.filter((customer) =>
+    new Date(customer.created_at) >= oneWeekAgo &&
+    new Date(customer.created_at) <= today
+  );
+
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  let data = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(today.getDate() - i);
+
+    const dayName = dayNames[date.getDay()];
+
+    const count = newCustomer.filter((customer) => {
+      const customerDate = new Date(customer.created_at);
+      return customerDate.getDate() === date.getDate() &&
+        customerDate.getMonth() === date.getMonth() &&
+        customerDate.getFullYear() === date.getFullYear();
+    }).length;
+
+    data.push({ name: dayName, count: count });
+  }
+
+  const mapData = data.map((day) => {
+    return { name: day.name.slice(0, 3), count: day.count };
+  });
+
+  return mapData;
+}
+
+export { calculateNewShopInSevenDays, calculateStatusShopInSevenDays, calculateNewCustomerInSevenDays };

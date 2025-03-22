@@ -117,6 +117,7 @@ export default function EditShop() {
                 </div>
             </div>
             <div>
+                {placeName}
                 {LeafletMap ? <LeafletMap position={position} setPosition={setPosition} placeName={placeName} setPlaceName={setPlaceName} className="h-96" /> : <p>กำลังโหลดแผนที่...</p>}
             </div>
 
