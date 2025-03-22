@@ -1,4 +1,4 @@
-import { Outlet, useLocation, type LoaderFunctionArgs } from "react-router";
+import { Outlet, redirect, useLocation, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import SidebarMenu, { SidebarItem } from "~/components/sidebar-menu";
 import {
   LayoutDashboard,
