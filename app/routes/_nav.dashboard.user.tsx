@@ -1,5 +1,5 @@
 import { Link, redirect, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
-import { Store } from "lucide-react";
+import { User } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useAuth } from "~/utils/auth";
 import CardDashboardUser from "~/components/card-dashboard-user";
@@ -97,7 +97,7 @@ export default function DashBoardUser() {
             <div className="w-full flex flex-col justify-between px-10 pt-10 gap-4 xl:flex-row">
                 <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-down">
                     <div className="p-4 rounded-full bg-[#C8C3F4]">
-                        <Store width={24} height={24} />
+                        <User width={24} height={24} />
                     </div>
                     <div className="flex flex-col gap-1 justify-center items-center">
                         <h1 className="text-lg text-[rgb(0,0,0,0.5)]">ลูกค้าทั้งหมด</h1>
@@ -106,7 +106,7 @@ export default function DashBoardUser() {
                 </div>
                 <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-down">
                     <div className="p-4 rounded-full bg-[#FC5A5A]">
-                        <Store width={24} height={24} color="#a93d3d" />
+                        <User width={24} height={24} color="#a93d3d" />
                     </div>
                     <div className="flex flex-col gap-1 justify-center items-center">
                         <h1 className="text-lg text-[rgb(0,0,0,0.5)]">ลูกค้าที่ถูกระงับ</h1>
@@ -115,7 +115,7 @@ export default function DashBoardUser() {
                 </div>
                 <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-down">
                     <div className="p-4 rounded-full bg-[#C5FFC2]">
-                        <Store width={24} height={24} />
+                        <User width={24} height={24} />
                     </div>
                     <div className="flex flex-col gap-1 justify-center items-center">
                         <h1 className="text-lg text-[rgb(0,0,0,0.5)] text-nowrap">ลูกค้าที่ยืนยันบัญชีแล้ว</h1>
@@ -124,7 +124,7 @@ export default function DashBoardUser() {
                 </div>
                 <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-down">
                     <div className="p-4 rounded-full bg-[#FFE3BE]">
-                        <Store width={24} height={24} color="#8D4F00" />
+                        <User width={24} height={24} color="#8D4F00" />
                     </div>
                     <div className="flex flex-col gap-1 justify-center items-center">
                         <h1 className="text-lg text-[rgb(0,0,0,0.5)] text-nowrap">ลูกค้าไม่ได้ยืนยันบัญชี</h1>
