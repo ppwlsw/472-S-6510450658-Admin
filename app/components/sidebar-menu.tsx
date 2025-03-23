@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useFetcher, useLocation } from "react-router";
+import { LogoutModal } from "./logout-modal";
 
 interface SidebarItemProps {
   icon: LucideIcon;
@@ -80,50 +81,12 @@ function SubSidebarItem({
   );
 }
 
-function LogoutFetcherForm() {
-  const [isPoping, setIsPoping] = useState<boolean>(false);
 
-  return (
-    <div className="flex flex-col justify-end h-full w-full gap-6">
-      {isPoping && (
-        <div className="flex flex-col justify-center items-center w-full z-50 text-obsidian gap-3 p-3 shadow-xl rounded-lg duration-300 border-[1px] border-gray-200">
-          <p>ต้องการออกจากระบบใช่ไหม</p>
-          <div className="w-full flex flex-rol justify-evenly items-center">
-            <button
-              className="bg-white-smoke text-obsidian border-[1px] p-1 rounded-lg active:bg-gray-400 active:text-white-smoke active:scale-105 duration-300"
-              onClick={() => {
-                setIsPoping(false);
-              }}
-            >
-              ยกเลิก
-            </button>
-            <Link
-              to={"/logout"}
-              className="bg-red-600 text-white-smoke border-[1px] p-1 rounded-lg hover:bg-white-smoke hover:text-red-600 hover:scale-105 duration-300"
-            >
-              ยืนยัน
-            </Link>
-          </div>
-        </div>
-      )}
-
-      <button
-        className="h-fit w-full text-center p-2 cursor-pointer rounded-md transition-all duration-300 bg-red-500 bg-opacity-90 text-white hover:bg-opacity-100 scale-105 hover:bg-white-smoke hover:scale-105 hover:text-red-500 hover:border-[1px] hover:cursor-pointer flex flex-row justify-center items-center gap-3"
-        onClick={() => {
-          setIsPoping( !isPoping );
-        }}
-      >
-        <LogOut size={20} />
-        <p>ออกจากระบบ</p>
-      </button>
-    </div>
-  );
-}
 
 export default function SidebarMenu() {
   const { pathname, search } = useLocation();
   const currentPath = pathname + search;
-
+  const [ isPoping, setIsPoping] = useState<boolean>(false);
   return (
     <nav className="fixed top-0 left-0 z-10 h-screen max-sm:hidden sm:w-fit bg-white text-black border-r-[1px] border-r-[rgb(0,0,0,0.09)] lg:w-[257px] transition-all duration-300">
       <div className="w-full flex flex-row justify-between items-center p-4 border-b-[1px] border-b-[rgb(0,0,0,0.1)]">
@@ -176,8 +139,17 @@ export default function SidebarMenu() {
         </li>
       </ul>
 
-      <div className="absolute bottom-10 left-0 right-0 py-2 px-4 h-[50%] flex flex-col justify-end">
-        <LogoutFetcherForm />
+      <div className="absolute bottom-10 left-0 right-0 py-2 px-4 h-[50%] flex flex-col justify-end gap-3">
+        <LogoutModal isPoping={isPoping} setIsPoping={setIsPoping}/>
+        <button
+          className="h-fit w-full text-center p-2 cursor-pointer rounded-md transition-all duration-300 bg-red-500 bg-opacity-90 text-white hover:bg-opacity-100 scale-105 hover:bg-white-smoke hover:scale-105 hover:text-red-500 hover:border-[1px] hover:cursor-pointer flex flex-row justify-center items-center gap-3"
+          onClick={() => {
+            setIsPoping(!isPoping);
+          }}
+        >
+          <LogOut size={20} />
+          <p>ออกจากระบบ</p>
+        </button>
       </div>
     </nav>
   );
