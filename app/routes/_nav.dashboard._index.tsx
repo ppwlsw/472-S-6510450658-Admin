@@ -4,8 +4,16 @@ import CardDashboardShop from "~/components/card-dashboard-shop";
 import CardDashboardUser from "~/components/card-dashboard-user";
 import provider, { setDefaultProvider } from "~/provider";
 import { useAuth } from "~/utils/auth";
+import type { QueueProps } from "./_nav.dashboard.queue";
+import CardDashboardQueue from "~/components/card-dashboard-queue";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs): Promise<{
+    shops: any;
+    customers: any;
+    totalCustomers: number;
+    totalShops: number;
+    queues: QueueProps[];
+}> {
     const { getCookie } = useAuth
     const auth = await getCookie({ request: request });
 
@@ -27,8 +35,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
     );
 
+    const resQueues = await fetch(`${process.env.API_BASE_URL}/queues/getAllQueuesAllShops`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${auth.token}`,
+        }
+    }
+    );
+
     const jsonAllShop = await res.json();
     const jsonAllCustomer = await resCustomer.json();
+    const jsonAllQueues = await resQueues.json().then((data) => data.data);
 
 
     const data = jsonAllShop.data;
@@ -39,7 +57,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
         shops: jsonAllShop.data,
         customers: jsonAllCustomer.data,
         totalCustomers: totalCustomers,
-        totalShops: totalShops
+        totalShops: totalShops,
+        queues: jsonAllQueues
     };
 }
 
@@ -135,7 +154,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DashBoardAll() {
-    const { shops, customers, totalShops, totalCustomers } = useLoaderData<typeof loader>();
+    const { shops, customers, totalShops, totalCustomers, queues } = useLoaderData<typeof loader>();
 
     return (
         <div className="w-full h-full py-10">
@@ -198,6 +217,25 @@ export default function DashBoardAll() {
                                 }
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div className="">
+                <div className="w-full flex flex-col gap-4 px-10 pt-10 animate-fade-in">
+                    <div className="w-full flex flex-row justify-between items-center">
+                        <h1 className="text-xl font-bold">
+                            คิวทั้งหมด
+                        </h1>
+                    </div>
+                    <div className="w-full bg-white p-4 rounded-lg shadow-md gap-4 overflow-y-scroll animate-fade-in">
+                        {
+                            queues.map((queue: any) =>
+                                <div key={queue.id} className="w-full">
+                                    <CardDashboardQueue queue={queue} />
+                                    <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </div>
