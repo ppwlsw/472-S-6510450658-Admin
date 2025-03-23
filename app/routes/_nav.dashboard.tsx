@@ -20,7 +20,6 @@ export default function Dashboard() {
                     <Link to="/dashboard" className={`${checkpath("/dashboard") ? "text-black" : "text-gray-500"} transition-all duration-300 text-xl`}>ทั้งหมด</Link>
                     <Link to="/dashboard/shop" className={`${checkpath("/dashboard/shop") ? "text-black" : "text-gray-500"} transition-all duration-300 text-xl`}>ร้านค้า</Link>
                     <Link to="/dashboard/user" className={`${checkpath("/dashboard/user") ? "text-black" : "text-gray-500"} transition-all duration-300 text-xl`}>ลูกค้า</Link>
-                    <Link to="/dashboard/queue" className={`${checkpath("/dashboard/queue") ? "text-black" : "text-gray-500"} transition-all duration-300 text-xl`}>คิว</Link>
                 </div>
             </div>
             <div className="w-full h-[0.8px] bg-gray-200"></div>

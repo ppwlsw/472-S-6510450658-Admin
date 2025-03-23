@@ -13,7 +13,6 @@ type Params = {
   "/hello": {};
   "/createshop": {};
   "/dashboard": {};
-  "/dashboard/queue": {};
   "/dashboard/shop": {};
   "/dashboard/user": {};
   "/user/:id": {
