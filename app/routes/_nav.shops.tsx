@@ -22,7 +22,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     );
 
 
-    const res = await fetch(`${process.env.API_BASE_URL}/shops/filter?page=${page}` + (name ? `&name=${name}` : "") + (status ? `&status=${status}` : "") , {
+    const res = await fetch(`${process.env.API_BASE_URL}/shops/filter?page=${page}` + (name ? `&name=${name}` : "") , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -30,6 +30,23 @@ export async function loader({ request }: LoaderFunctionArgs){
         }
     }
     );
+
+    if (res1.status === 404) {
+        return {
+            message: "ไม่มีข้อมูลร้านค้า",
+            shops: [],
+            paginationLinks: [],
+            paginationMeta: [],
+            name: "",
+            status: "",
+            stats: {
+                totalShops: 0,
+                totalBan: 0,
+                totalConfirm: 0,
+                totalPending: 0
+            }
+        }
+    }
 
     const jsonAlldata = await res1.json();
     const jsonData = await res.json();
@@ -48,6 +65,7 @@ export async function loader({ request }: LoaderFunctionArgs){
     }
 
     return {
+        message: "",
         shops: jsonData.data,
         paginationLinks: jsonData.links,
         paginationMeta: jsonData.meta,
@@ -117,7 +135,7 @@ export async function action({ request }: { request: Request }) {
 }
 
 export default function AllShop(){
-    const { shops, paginationLinks, paginationMeta, name, status, stats } = useLoaderData<typeof loader>();
+    const { shops, paginationLinks, paginationMeta, name, status, stats, message } = useLoaderData<typeof loader>();
     const fetcher = useFetcher<typeof action>();
 
     function checkStatus(shop: any) {
@@ -227,41 +245,50 @@ export default function AllShop(){
                         <h1 className="px-2 md:px-4 text-left hidden md:block">ที่อยู่</h1>
                         <h1 className="px-2 md:px-4 text-left">สถานะ</h1>
                     </div>
-                    
-                    <div className="flex flex-col h-full">
-                            {shops.map((shop: any) => (
-                                <fetcher.Form key={shop.id} method="post" className="odd:bg-[rgb(0,0,0,0.05)] flex flex-col transition-all duration-300 hover:bg-[rgb(0,0,0,0.1)] cursor-pointer">
-                                    <input type="hidden" name="shopId" value={shop.id ?? ""} />
-                                    <input type="hidden" name="name" value={shop.name ?? ""} />
-                                    <input type="hidden" name="email" value={shop.email ?? ""} />
-                                    <input type="hidden" name="address" value={shop.address ?? ""} />
-                                    <input type="hidden" name="phone" value={shop.phone ?? ""} />
-                                    <input type="hidden" name="description" value={shop.description ?? ""} />
-                                    <input type="hidden" name="is_verified" value={shop.is_verified ?? ""} />
-                                    <input type="hidden" name="image_url" value={shop.image_url ?? ""} />
-                                    <input type="hidden" name="is_open" value={shop.is_open ?? ""} />
-                                    <input type="hidden" name="latitude" value={shop.latitude ?? ""} />
-                                    <input type="hidden" name="longitude" value={shop.longitude ?? ""} />
-                                    <input type="hidden" name="created_at" value={shop.created_at ?? ""} />
-                                    <input type="hidden" name="updated_at" value={shop.updated_at ?? ""} />
-                                    <input type="hidden" name="deleted_at" value={shop.deleted_at ?? ""} />
+                    {
+                        message == "" ?
+                        (
+                        <div className="flex flex-col h-full">
+                                {shops.map((shop: any) => (
+                                    <fetcher.Form key={shop.id} method="post" className="odd:bg-[rgb(0,0,0,0.05)] flex flex-col transition-all duration-300 hover:bg-[rgb(0,0,0,0.1)] cursor-pointer">
+                                        <input type="hidden" name="shopId" value={shop.id ?? ""} />
+                                        <input type="hidden" name="name" value={shop.name ?? ""} />
+                                        <input type="hidden" name="email" value={shop.email ?? ""} />
+                                        <input type="hidden" name="address" value={shop.address ?? ""} />
+                                        <input type="hidden" name="phone" value={shop.phone ?? ""} />
+                                        <input type="hidden" name="description" value={shop.description ?? ""} />
+                                        <input type="hidden" name="is_verified" value={shop.is_verified ?? ""} />
+                                        <input type="hidden" name="image_url" value={shop.image_url ?? ""} />
+                                        <input type="hidden" name="is_open" value={shop.is_open ?? ""} />
+                                        <input type="hidden" name="latitude" value={shop.latitude ?? ""} />
+                                        <input type="hidden" name="longitude" value={shop.longitude ?? ""} />
+                                        <input type="hidden" name="created_at" value={shop.created_at ?? ""} />
+                                        <input type="hidden" name="updated_at" value={shop.updated_at ?? ""} />
+                                        <input type="hidden" name="deleted_at" value={shop.deleted_at ?? ""} />
 
-                                    <button name="_action" value="show" type="submit" key={shop.id} className="relative grid grid-cols-2 md:grid-cols-5 gap-4  min-h-16 items-center cursor-pointer">
-                                        <h1 className="px-2 md:px-4 text-left truncate">{shop.name}</h1>
-                                        <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.email}</h1>
-                                        <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.phone}</h1>
-                                        <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.address}</h1>
-                                        <h1 className="px-2 md:px-4 text-left">{checkStatus(shop)}</h1>
-                                        <ChevronRight className="absolute right-2 md:right-4" width={20} height={20}/>
-                                    </button>
-                                </fetcher.Form>
-                            ))}
-                        <div className="flex flex-row w-full h-full justify-end items-end">
-                            <h1 className="text-[rgb(0,0,0,0.5)]">
-                                แสดง {paginationMeta.from} - {paginationMeta.to} จากทั้งหมด {paginationMeta.total} ร้านค้า
-                            </h1>
+                                        <button name="_action" value="show" type="submit" key={shop.id} className="relative grid grid-cols-2 md:grid-cols-5 gap-4  min-h-16 items-center cursor-pointer">
+                                            <h1 className="px-2 md:px-4 text-left truncate">{shop.name}</h1>
+                                            <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.email}</h1>
+                                            <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.phone}</h1>
+                                            <h1 className="px-2 md:px-4 text-left truncate hidden md:block">{shop.address}</h1>
+                                            <h1 className="px-2 md:px-4 text-left">{checkStatus(shop)}</h1>
+                                            <ChevronRight className="absolute right-2 md:right-4" width={20} height={20}/>
+                                        </button>
+                                    </fetcher.Form>
+                                ))}
+                            <div className="flex flex-row w-full h-full justify-end items-end">
+                                <h1 className="text-[rgb(0,0,0,0.5)]">
+                                    แสดง {paginationMeta.from} - {paginationMeta.to} จากทั้งหมด {paginationMeta.total} ร้านค้า
+                                </h1>
+                            </div>
                         </div>
-                    </div>
+                        ) :
+                        (
+                            <div className="flex flex-col items-center justify-center w-full h-full">
+                                <h1 className="text-2xl font-semibold text-[rgb(0,0,0,0.5)]">{message}</h1>
+                            </div>
+                        )
+                    }
 
             
                 </div>

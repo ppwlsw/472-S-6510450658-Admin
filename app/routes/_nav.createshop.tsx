@@ -85,6 +85,22 @@ export async function action({ request }: ActionFunctionArgs) {
         }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
+    if (apiUrl !== "" && apiToken === "") {
+        return new Response(JSON.stringify({
+            message: "กรุณากรอก API KEY ของฐานข้อมูลของรายการสินค้า",
+            error: "กรุณากรอก API KEY ของฐานข้อมูลของรายการสินค้า",
+            status: 400
+        }), { status: 400, headers: { "Content-Type": "application/json" } });
+    }
+
+    if (apiUrl === "" && apiToken !== "") {
+        return new Response(JSON.stringify({
+            message: "กรุณากรอก API URL ของฐานข้อมูลของรายการสินค้า",
+            error: "กรุณากรอก API URL ของฐานข้อมูลของรายการสินค้า",
+            status: 400
+        }), { status: 400, headers: { "Content-Type": "application/json" } });
+    }
+
     const response = await fetch(`${process.env.API_BASE_URL}/shops`, {
         method: "POST",
         headers: {
@@ -113,6 +129,18 @@ export async function action({ request }: ActionFunctionArgs) {
     else {
         const data = await response.json();
         const shopId = data.data.id;
+
+        if (apiUrl === "" && apiToken === "") {
+            const message: ActionMessage = {
+                message: "สร้างบัญชีร้านค้าสำเร็จ",
+                error: "",
+                status: 200,
+                success: true,
+            }
+            return message;
+        }
+
+
         const responseApiUrl = await fetch(`${process.env.API_BASE_URL}/shops/${shopId}/item`, {
             method: "POST",
             headers: {

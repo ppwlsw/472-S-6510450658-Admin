@@ -10,7 +10,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const { getCookie } = useAuth
     const auth = await getCookie({ request: request });
     const url = new URL(request.url);
-    const page = Number(url.searchParams.get("page")) || 1;
 
     const res1 = await fetch(`${process.env.API_BASE_URL}/users/withTrashed`, {
         method: "GET",
@@ -21,8 +20,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
     );
 
-    const jsonAlldata = await res1.json();
+    if (res1.status === 404) {
+        return {
+            customers: [],
+            stats: {
+                totalUsers: 0,
+                totalBan: 0,
+                totalConfirm: 0,
+                totalPending: 0
+            },
+            customerGraphData: []
+        }
+    }
 
+    const jsonAlldata = await res1.json();
     const data = jsonAlldata.data;
     const totalUsers = data.length;
     const totalBan = data.filter((user: any) => user.is_verified === true && user.deleted_at != null).length;
@@ -141,12 +152,19 @@ export default function DashBoardUser() {
                         <Link to="/users" className="underline">ดูทั้งหมด</Link>
                     </div>
                     {
-                        customers.map((customer: any) =>
-                            <div key={customer.id} className="w-full">
-                                <CardDashboardUser user={customer} />
-                                <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                        customers.length === 0 ?
+                            <div className="w-full h-full flex justify-center items-center">
+                                <h1 className="text-2xl font-medium text-gray-400">ไม่มีลูกค้า</h1>
                             </div>
-                        )
+                            :
+                            (
+                                customers.map((customer: any) =>
+                                    <div key={customer.id} className="w-full">
+                                        <CardDashboardUser user={customer} />
+                                        <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                    </div>
+                                )
+                            )
                     }
                 </div>
                 <div className="w-full h-full bg-white p-10 rounded-xl shadow-md animate-fade-in flex flex-col gap-6">

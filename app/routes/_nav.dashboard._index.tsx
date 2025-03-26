@@ -27,12 +27,17 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<{
     customers: any;
     totalCustomers: number;
     totalShops: number;
+    messages: {
+        "shop": string;
+        "customer": string;
+        "queue": string;
+    };
     queues: QueueProps[];
 }> {
     const { getCookie } = useAuth
     const auth = await getCookie({ request: request });
 
-    const res = await fetch(`${process.env.API_BASE_URL}/shops`, {
+    const res = await fetch(`${process.env.API_BASE_URL}/shops/withTrashed`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -58,18 +63,47 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<{
         }
     }
     );
+    let data = [];
+    let jsonAllCustomer = [];
+    let jsonAllQueues = [];
+    let totalShops = 0;
+    let totalCustomers = 0;
 
-    const jsonAllShop = await res.json();
-    const jsonAllCustomer = await resCustomer.json();
-    const jsonAllQueues = await resQueues.json().then((data) => data.data);
+    const messages = {
+        shop: "",
+        customer: "",
+        queue: ""
+    };
+
+    if (res.ok) {
+        const jsonAllShop = await res.json();
+        data = jsonAllShop.data;
+        totalShops = data.length;
+    }
+    else {
+        messages.shop = "ไม่มีข้อมูลร้านค้า";
+    }
+    
+    if (resCustomer.ok) {
+        jsonAllCustomer = await resCustomer.json();
+        totalCustomers = jsonAllCustomer.data.length;
+    }
+    else {
+        messages.customer = "ไม่มีข้อมูลลูกค้า";
+    }
+
+    if (resQueues.ok) {
+        jsonAllQueues = await resQueues.json().then((data) => data.data);
+    }
+    else {
+        messages.queue = "ไม่มีข้อมูลคิว";
+    }
 
 
-    const data = jsonAllShop.data;
-    const totalShops = data.length;
-    const totalCustomers = jsonAllCustomer.data.length;
 
     return {
-        shops: jsonAllShop.data,
+        shops: data,
+        messages: messages,
         customers: jsonAllCustomer.data,
         totalCustomers: totalCustomers,
         totalShops: totalShops,
@@ -169,7 +203,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DashBoardAll() {
-    const { shops, customers, totalShops, totalCustomers, queues } = useLoaderData<typeof loader>();
+    const { shops, customers, totalShops, totalCustomers, queues, messages } = useLoaderData<typeof loader>();
 
     return (
         <div className="w-full h-full py-10">
@@ -205,12 +239,18 @@ export default function DashBoardAll() {
                             </div>
                             <div className="h-[500px] w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 overflow-y-scroll animate-fade-in">
                                 {
-                                    shops.map((shop: any) =>
-                                        <div key={shop.id} className="w-full">
-                                            <CardDashboardShop shop={shop} />
-                                            <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
-                                        </div>
-                                    )
+                                    messages.shop === "" ? 
+                                    (
+                                        shops.map((shop: any) =>
+                                            <div key={shop.id} className="w-full">
+                                                <CardDashboardShop shop={shop} />
+                                                <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                            </div>
+                                        )
+                                    ) : 
+                                    <div className="">
+                                        <h1 className="text-lg font-bold text-red-500">{messages.shop}</h1>
+                                    </div>
                                 }
                             </div>
                         </div>
@@ -223,12 +263,18 @@ export default function DashBoardAll() {
                             </div>
                             <div className="h-[500px] w-full bg-white flex flex-col rounded-lg shadow-lg items-center p-8 gap-4 overflow-y-scroll animate-fade-in">
                                 {
-                                    customers.map((user: any) =>
-                                        <div key={user.id} className="w-full">
-                                            <CardDashboardUser user={user} />
-                                            <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
-                                        </div>
-                                    )
+                                    messages.customer === "" ?
+                                    (
+                                        customers.map((user: any) =>
+                                            <div key={user.id} className="w-full">
+                                                <CardDashboardUser user={user} />
+                                                <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                            </div>
+                                        )
+                                    ) :
+                                    <div className="">
+                                        <h1 className="text-lg font-bold text-red-500">{messages.customer}</h1>
+                                    </div>
                                 }
                             </div>
                         </div>
@@ -244,12 +290,18 @@ export default function DashBoardAll() {
                     </div>
                     <div className="w-full bg-white p-4 rounded-lg shadow-md gap-4 overflow-y-scroll animate-fade-in">
                         {
-                            queues.map((queue: any) =>
-                                <div key={queue.id} className="w-full">
-                                    <CardDashboardQueue queue={queue} />
-                                    <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
-                                </div>
-                            )
+                            messages.queue === "" ?
+                            (
+                                queues.map((queue: QueueProps) =>
+                                    <div key={queue.id} className="w-full">
+                                        <CardDashboardQueue queue={queue} />
+                                        <div className="w-full h-[0.8px] bg-[rgb(0,0,0,0.1)]"></div>
+                                    </div>
+                                )
+                            ) :
+                            <div className="">
+                                <h1 className="text-lg font-bold text-red-500">{messages.queue}</h1>
+                            </div>
                         }
                     </div>
                 </div>
