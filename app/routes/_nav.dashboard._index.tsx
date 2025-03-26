@@ -4,8 +4,23 @@ import CardDashboardShop from "~/components/card-dashboard-shop";
 import CardDashboardUser from "~/components/card-dashboard-user";
 import provider, { setDefaultProvider } from "~/provider";
 import { useAuth } from "~/utils/auth";
-import type { QueueProps } from "./_nav.dashboard.queue";
 import CardDashboardQueue from "~/components/card-dashboard-queue";
+
+interface QueueProps {
+    "id": number,
+    "name": string,
+    "description": string,
+    "queue_image_url": string,
+    "queue_counter": number,
+    "is_available": boolean,
+    "tag": string,
+    "shop_id": number,
+    "created_at": string,
+    "updated_at": string,
+    "user_name": string,
+    "user_email": string,
+    "status": string
+}
 
 export async function loader({ request }: LoaderFunctionArgs): Promise<{
     shops: any;

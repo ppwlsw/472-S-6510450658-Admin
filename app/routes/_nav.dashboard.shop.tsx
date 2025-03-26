@@ -115,15 +115,12 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DashBoardShop () {
-    const { shops, ShopGraphData, ShopBarGraphData, name, status, stats } = useLoaderData<typeof loader>();
+    const { shops, ShopGraphData, ShopBarGraphData, stats } = useLoaderData<typeof loader>();
 
 
     return (
         <div className="flex flex-col justify-center">
             <div className="w-full flex flex-col gap-4  px-10 pt-10">
-                {/* <h1 className="text-2xl">
-                    สถานะร้านค้า
-                </h1> */}
                 <div className="w-full flex flex-col justify-between gap-4 xl:flex-row">
                     <div className="w-full flex justify-center items-center bg-white p-4 rounded-xl shadow-md gap-10 animate-fade-in">
                         <div className="p-4 rounded-full bg-[#C8C3F4]">

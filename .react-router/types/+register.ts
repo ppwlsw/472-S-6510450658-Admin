@@ -24,6 +24,9 @@ type Params = {
   "/shop/:id/edit": {
     "id": string;
   };
+  "/item/:id": {
+    "id": string;
+  };
   "/users": {};
   "/shops": {};
 };

@@ -1,7 +1,7 @@
 import { Link, redirect, useFetcher, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { useEffect, useState } from "react";
 
-import Provider, { setDefaultStatus } from "~/provider";
+import Provider from "~/provider";
 import { useAuth } from "~/utils/auth";
 
 interface MapClientProps {
