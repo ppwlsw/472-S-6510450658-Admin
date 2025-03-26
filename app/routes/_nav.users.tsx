@@ -166,13 +166,6 @@ export default function Users(){
                     <div className="w-full flex flex-col justify-between items-center lg:flex-row">
                         <h1 className="font-normal text-2xl">ลูกค้า</h1>
                         <div className="flex flex-wrap gap-4 items-center">
-                            <fetcher.Form method="POST" className="flex flex-row gap-4 items-center">
-                                <input name="name" type="text" placeholder="ชื่อลูกค้า" className="border border-[rgb(0,0,0,0.1)] rounded-md p-2"/>
-                                
-                                <button name="_action" value="search" type="submit" className="bg-[#3A57E8] text-white p-2 rounded-md hover:bg-[#2E46C2] transition-all duration-300">
-                                    ค้นหา
-                                </button>
-                            </fetcher.Form>
 
                             <div className="flex flex-row gap-4 items-center">
                                 <Link 

@@ -6,7 +6,7 @@ import provider, { setDefaultProvider } from "~/provider";
 import { useAuth } from "~/utils/auth";
 import CardDashboardQueue from "~/components/card-dashboard-queue";
 
-interface QueueProps {
+export interface QueueProps {
     "id": number,
     "name": string,
     "description": string,

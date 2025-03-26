@@ -182,15 +182,6 @@ export default function AllShop(){
                                 <button name="_action" value="search" type="submit" className="bg-[#3A57E8] text-white p-2 rounded-md hover:bg-[#2E46C2] transition-all duration-300">
                                     ค้นหา
                                 </button>
-                                <h1 className="text-[rgb(0,0,0,0.5)]">
-                                    กรองตาม:
-                                </h1>
-                                <select name="status" className="border border-[rgb(0,0,0,0.1)] rounded-md p-2">
-                                    <option value="">ทั้งหมด</option>
-                                    <option value="confirm">ยืนยันแล้ว</option>
-                                    <option value="ban">ระงับบัญชี</option>
-                                    <option value="pending">ยังไม่ยืนยันบัญชี</option>
-                                </select>
                             </fetcher.Form>
 
                             <div className="flex flex-row gap-4 items-center">

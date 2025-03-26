@@ -1,4 +1,4 @@
-import type { QueueProps } from "~/routes/_nav.dashboard.queue";
+import type { QueueProps } from "~/routes/_nav.dashboard._index";
 
 export default function CardDashboardQueue({queue} : {queue: QueueProps}) {
 
