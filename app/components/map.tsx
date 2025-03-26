@@ -1,8 +1,6 @@
-// "use client";
-
 import { MapContainer, TileLayer, Marker, useMapEvents, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface MapClientProps {
     position: [number, number] | null;

@@ -1,7 +1,5 @@
 import { Phone } from "lucide-react";
-import type { ActionFunctionArgs } from "react-router";
-import { redirect, useFetcher } from "react-router";
-import provider, { setDefaultProvider } from "~/provider";
+import { useFetcher } from "react-router";
 import type { action } from "~/routes/_nav.dashboard._index";
 
 interface CardDashboardShopProps {

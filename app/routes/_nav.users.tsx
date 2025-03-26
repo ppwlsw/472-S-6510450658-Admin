@@ -1,6 +1,6 @@
 import { type LoaderFunctionArgs } from "react-router";
 import { Link, redirect, useFetcher, useLoaderData } from "react-router";
-import { Store, ChevronRight, PlusCircle, User2 } from "lucide-react";
+import { ChevronRight, User2 } from "lucide-react";
 import Provider, { setDefaultProvider } from "~/provider";
 import { useAuth } from "~/utils/auth";
 

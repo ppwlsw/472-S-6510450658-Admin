@@ -2,8 +2,7 @@ import { useFetcher, type ActionFunctionArgs, type LoaderFunctionArgs } from 're
 import { Link, Outlet, redirect, useLoaderData } from 'react-router';
 import { MapPin, Phone, Mail, Clock, Info, Calendar, CheckCircle, ChevronLeft } from 'lucide-react';
 
-import Provider, { setDefaultStatus } from "~/provider";
-import { useEffect, useRef } from 'react';
+import Provider from "~/provider";
 import { useAuth } from '~/utils/auth';
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -90,6 +89,11 @@ export default function DetailShop() {
                         รายละเอียดร้านค้า
                     </h1>
                 </div>
+                <Link to={`/item/${shop.shopfilter.id}`} className="flex flex-row justify-end">
+                    <button popoverTarget="restore-popover" className="px-3 py-2 border-[1px] border-black text-black hover:bg-black hover:text-white rounded-lg transition-all duration-300 hover:bg-opacity-100 hover:cursor-pointer">
+                        <h1>ดูรายการ</h1>
+                    </button>
+                </Link>
             </div>
             <div className="text-center space-y-2 my-8">
                 <h1 className="text-3xl font-bold text-gray-900">{shop.shopfilter.name}</h1>
@@ -221,7 +225,7 @@ export default function DetailShop() {
                             </div>
                         )
                     }
-                    <div id="delete-popover" popover="" className='top-[75%] left-[70%] transition-all animate-fade-in' style={{display: fetcher.data?.delete === true ? 'none' : ''}}>
+                    <div id="delete-popover" popover="" className='top-[75%] left-[70%] transition-all animate-fade-in' style={{ display: fetcher.data?.delete === true ? 'none' : '' }}>
                         <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] text-center">
                             <h2 className="text-xl font-semibold mb-4">คุณต้องการระงับร้านค้านี้หรือไม่?</h2>
                             <p className="text-gray-600 mb-4">หากยืนยัน ร้านค้านี้จะถูกระงับและไม่สามารถใช้งานได้</p>
@@ -238,7 +242,7 @@ export default function DetailShop() {
                             </div>
                         </div>
                     </div>
-                    <div  id="restore-popover" popover="" className='top-[75%] left-[70%] transition-all animate-fade-in' style={{display: fetcher.data?.restore === true ? 'none' : ''}}>
+                    <div id="restore-popover" popover="" className='top-[75%] left-[70%] transition-all animate-fade-in' style={{ display: fetcher.data?.restore === true ? 'none' : '' }}>
                         <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] text-center">
                             <h2 className="text-xl font-semibold mb-4">คุณต้องการกู้คืนร้านค้านี้หรือไม่?</h2>
                             <p className="text-gray-600 mb-4">หากยืนยัน ร้านค้านี้จะสามารถใช้งานได้อีกครั้ง</p>

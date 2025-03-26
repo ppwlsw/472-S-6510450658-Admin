@@ -47,6 +47,8 @@ export async function action({ request }: ActionFunctionArgs) {
     const phone = formData.get("phone") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const apiUrl = formData.get("apiUrl") as string;
+    const apiToken = formData.get("apiToken") as string;
 
 
     if (phone.length != 10) {
@@ -109,6 +111,30 @@ export async function action({ request }: ActionFunctionArgs) {
         return message;
     }
     else {
+        const data = await response.json();
+        const shopId = data.data.id;
+        const responseApiUrl = await fetch(`${process.env.API_BASE_URL}/shops/${shopId}/item`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${auth.token}`,
+            },
+            body: JSON.stringify({
+                'api_url': apiUrl,
+                'api_token': apiToken,
+            }),
+        });
+
+        console.log(responseApiUrl);
+        if (responseApiUrl.status !== 201) {
+            const message: ActionMessage = {
+                message: "เกิดข้อผิดพลาดในการสร้าง API URL ของร้านค้า",
+                error: "เกิดข้อผิดพลาดในการสร้าง API URL ของร้านค้า",
+                status: 500,
+            }
+            return message;
+        }
+
         const message: ActionMessage = {
             message: "สร้างบัญชีร้านค้าสำเร็จ",
             error: "",
@@ -150,7 +176,7 @@ export default function CreateShop() {
     return (
         <div className="relative h-[93%] flex flex-col xl:flex-row items-center justify-center gap-6">
             <div className="w-full h-full flex flex-col justify-center items-center p-10 gap-4">
-                <h1 className="text-2xl font-medium">เลือกตำแหน่งบนแผนที่</h1>
+                <h1 className="text-2xl font-medium">เลือกตำแหน่งบนแผนที่ <span className="text-[#FC5A5A]">*</span></h1>
 
                 {LeafletMap ? <LeafletMap position={position} setPosition={setPosition} placeName={placeName} setPlaceName={setPlaceName} /> : <p>กำลังโหลดแผนที่...</p>}
             </div>
@@ -161,23 +187,23 @@ export default function CreateShop() {
                         <div className="flex flex-col gap-4">
                             <input type="hidden" name="position" value={position ? position.join(",") : ""} />
                             <label className="flex flex-col gap-2">
-                                <span>ชื่อร้านค้า</span>
+                                <p>ชื่อร้านค้า <span className="text-[#FC5A5A]">*</span></p>
                                 <input name="name" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md " />
                             </label>
                             <label className="flex flex-col gap-2">
-                                <span>ที่อยู่</span>
+                                <p>ที่อยู่ <span className="text-[#FC5A5A]">*</span></p>
                                 <input value={placeName ?? ""} name="address" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
                             </label>
                             <label className="flex flex-col gap-2">
-                                <span>เบอร์โทรศัพท์</span>
+                                <p>เบอร์โทรศัพท์ <span className="text-[#FC5A5A]">*</span></p>
                                 <input name="phone" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
                             </label>
                             <label className="flex flex-col gap-2">
-                                <span>อีเมล</span>
+                                <p>อีเมล <span className="text-[#FC5A5A]">*</span></p>
                                 <input name="email" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
                             </label>
                             <label className="flex flex-col gap-2">
-                                <span>รหัสผ่าน</span>
+                                <p>รหัสผ่าน <span className="text-[#FC5A5A]">*</span></p>
                                 <div className="flex items-center gap-2 relative">
                                     <input
                                         name="password"
@@ -193,7 +219,36 @@ export default function CreateShop() {
                                     </button>
                                 </div>
                             </label>
-                            {fetcher.data?.error && <h1 className="text-red-500">{fetcher.data?.error}</h1>}
+                            <details className="group h-[170px]">
+                                <summary className="w-full flex items-center justify-between cursor-pointer select-none">
+                                    <h1 className="text-lg text-[rgb(0,0,0,0.6)]">กรอกข้อมูลฐานข้อมูลเพิ่มเติมสำหรับรายการสินค้า</h1>
+                                    <svg
+                                        className="rotate-0 transition-transform duration-500 ease-in-out group-open:rotate-180"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="#2F3337"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="M6 9l6 6 6-6"></path>
+                                    </svg>
+                                </summary>
+                                <div className="mt-4 text-[rgb(0,0,0,0.6)] flex flex-col gap-2">
+                                    <label className="text-sm flex flex-col gap-2">
+                                        <span>API URL ของฐานข้อมูลของรายการสินค้า</span>
+                                        <input name="apiUrl" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
+                                    </label>
+                                    <label className="text-sm flex flex-col gap-2">
+                                        <span>API token ของฐานข้อมูลของรายการสินค้า</span>
+                                        <input name="apiToken" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
+                                    </label>
+                                </div>
+                            </details>
+                                {fetcher.data?.error && <h1 className="text-red-500">{fetcher.data?.error}</h1>}
                         </div>
                         <button
                             className="p-2 bg-[#3A57E8] bg-opacity-95 text-white rounded-md transform duration-300 transition-all hover:bg-opacity-100"

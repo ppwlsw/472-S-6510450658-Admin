@@ -3,7 +3,6 @@ import {
   LogOut,
   PlusCircle,
   Store,
-  User,
   Users,
   type LucideIcon,
 } from "lucide-react";
