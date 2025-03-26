@@ -121,11 +121,10 @@ export async function action({ request }: ActionFunctionArgs) {
             },
             body: JSON.stringify({
                 'api_url': apiUrl,
-                'api_token': apiToken,
+                'api_key': apiToken,
             }),
         });
 
-        console.log(responseApiUrl);
         if (responseApiUrl.status !== 201) {
             const message: ActionMessage = {
                 message: "เกิดข้อผิดพลาดในการสร้าง API URL ของร้านค้า",
@@ -243,7 +242,7 @@ export default function CreateShop() {
                                         <input name="apiUrl" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
                                     </label>
                                     <label className="text-sm flex flex-col gap-2">
-                                        <span>API token ของฐานข้อมูลของรายการสินค้า</span>
+                                        <span>API KEY ของฐานข้อมูลของรายการสินค้า</span>
                                         <input name="apiToken" type="text" className="p-2 border-[1px] border-[rgb(0,0,0,0.1)] rounded-md" />
                                     </label>
                                 </div>
