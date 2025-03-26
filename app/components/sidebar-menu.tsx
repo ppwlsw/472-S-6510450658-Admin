@@ -141,7 +141,7 @@ export default function SidebarMenu() {
       <div className="absolute bottom-10 left-0 right-0 py-2 px-4 h-[50%] flex flex-col justify-end gap-3">
         <LogoutModal isPoping={isPoping} setIsPoping={setIsPoping}/>
         <button
-          className="h-fit w-full text-center p-2 cursor-pointer rounded-md transition-all duration-300 bg-red-500 bg-opacity-90 text-white hover:bg-opacity-100 scale-105 hover:bg-white-smoke hover:scale-105 hover:text-red-500 hover:border-[1px] hover:cursor-pointer flex flex-row justify-center items-center gap-3"
+          className="h-fit w-full text-center p-2 cursor-pointer rounded-md transition-all duration-300 bg-white bg-opacity-90 text-[#8A92A6] hover:bg-opacity-100 scale-100 hover:bg-white hover:scale-105 hover:text-red-500 hover:border-[1px] hover:cursor-pointer flex flex-row justify-center items-center gap-3 shadow-sm"
           onClick={() => {
             setIsPoping(!isPoping);
           }}
