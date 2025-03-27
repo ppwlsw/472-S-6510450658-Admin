@@ -62,10 +62,11 @@ export default function MapClient({position, setPosition, placeName, setPlaceNam
   }, [position]);
   
   const center: [number,number] = setPosition != null ? !position ? [13.736717, 100.523186] : position : [13.736717, 100.523186];
+  const zoom = 12;
 
   return (
     <div className={`h-[500px] w-full ${className}`}>
-      <MapContainer center={center} zoom={12} className="h-full w-full rounded-lg shadow-2xl hover:scale-95 transition-all duration-300">
+      <MapContainer {...{ center, zoom }} className="h-full w-full rounded-lg shadow-2xl hover:scale-95 transition-all duration-300">
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {setPosition != null ? (
             <LocationMarker />
