@@ -42,7 +42,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: |
+          tags: >
             ${{ secrets.DOCKER_USERNAME }}/seeq-customer-frontend:latest
             ${{ secrets.DOCKER_USERNAME }}/seeq-customer-frontend:${{ github.sha }}
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/seeq-customer-frontend:buildcache
